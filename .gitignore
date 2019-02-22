@@ -9,3 +9,6 @@ __pycache__
 # Text editor backup files #
 ############################
 *~
+
+# Project generated files #
+*node_modules/
