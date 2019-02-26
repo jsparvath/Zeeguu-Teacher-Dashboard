@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import logo from './logo.svg'
+import ApiConnectionTest from './components/ApiConnectionTest'
 import './App.css'
 
 class App extends Component {
@@ -8,7 +9,7 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <p>Hello prettier!!!</p>
+          <ApiConnectionTest />
           <a
             className="App-link"
             href="https://reactjs.org"
