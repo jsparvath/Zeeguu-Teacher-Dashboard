@@ -1,19 +1,32 @@
-import React, { useEffect } from 'react'
-import { GET_COHORTS_INFO } from '../api/api_endpoints'
-import axios from 'axios'
+import React, { useEffect, useState } from 'react'
+import { getCohortsInfo } from '../api/api_endpoints'
 
-const HomeTemplate = () => <div>home template</div>
+const CohortItem = () => <div>Cohort Item</div>
+
+const HomeTemplate = ({ cohorts }) => (
+  <div>
+    {cohorts.map(cohort => (
+      <div key={cohort.id}>
+        <CohortItem />
+      </div>
+    ))}
+  </div>
+)
+
 const Home = () => {
-  useEffect(() => {
-    axios.get(GET_COHORTS_INFO).then(res => {
-      console.log(res)
-    })
-  })
+  const [cohorts, setCohortsInfo] = useState(null)
 
+  useEffect(() => {
+    getCohortsInfo().then(({ data }) => {
+      console.log(data)
+      setCohortsInfo(data)
+    })
+  }, [])
+
+  if (!cohorts) return <p>Loading!!</p>
   return (
     <div>
-      {GET_COHORTS_INFO}
-      <HomeTemplate />
+      <HomeTemplate cohorts={cohorts} />
     </div>
   )
 }
