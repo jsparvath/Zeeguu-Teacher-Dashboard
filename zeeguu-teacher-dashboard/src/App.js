@@ -2,12 +2,12 @@ import React, { Component } from 'react'
 import { Router, Link } from '@reach/router'
 
 import Home from './pages/Home'
-import LoginPage from './pages/LoginPage'
+// import LoginPage from './pages/LoginPage'
 import Classroom from './pages/Classroom'
 import StudentActivity from './pages/StudentActivity'
 
 import logo from './logo.svg'
-import './App.css'
+import './App.scss'
 
 const Nav = () => (
   <div>
@@ -25,7 +25,7 @@ class App extends Component {
         <Nav />
         <Router>
           <Home path="/" />
-          <LoginPage path="/login" />
+          {/* <LoginPage path="/login" /> */}
           <Classroom path="classroom/:classId" />
           <StudentActivity path="studentactivity" />
         </Router>
