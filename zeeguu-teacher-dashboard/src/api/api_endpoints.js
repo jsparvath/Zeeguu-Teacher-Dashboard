@@ -12,13 +12,21 @@ export function getCohortsInfo() {
   return _apiGet(GET_COHORTS_INFO)
 }
 
-function _apiGet(endpoint) {
+async function _apiGet(endpoint) {
   const cookies = new universalCookies()
   const params = {
     session: cookies.get('sessionID')
   }
-  return axios.get(endpoint, { params }).then(res => {
-    // console.log(res)
-    return res
-  })
+  const res = await axios.get(endpoint, { params })
+  // console.log(res)
+  return res
+}
+
+async function _apiPost(endpoint, data) {
+  const cookies = new universalCookies()
+  const params = {
+    session: cookies.get('sessionID')
+  }
+
+  const res = await axios.post(endpoint, data, { params })
 }

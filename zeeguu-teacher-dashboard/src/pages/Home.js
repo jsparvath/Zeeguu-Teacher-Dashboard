@@ -1,20 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import { getCohortsInfo } from '../api/api_endpoints'
+import CreateClass from '../components/CreateClass'
 
-const CohortItem = () => <div>Cohort Item</div>
+const CohortItem = ({ cohort }) => <div>{cohort.inv_code}</div>
 
 const HomeTemplate = ({ cohorts }) => (
   <div>
     {cohorts.map(cohort => (
-      <div key={cohort.id}>
-        <CohortItem />
-      </div>
+      <CohortItem key={cohort.id} cohort={cohort} />
     ))}
   </div>
 )
 
 const Home = () => {
-  const [cohorts, setCohortsInfo] = useState(null)
+  const [cohorts, setCohortsInfo] = useState([])
 
   useEffect(() => {
     getCohortsInfo().then(({ data }) => {
@@ -23,9 +22,10 @@ const Home = () => {
     })
   }, [])
 
-  if (!cohorts) return <p>Loading!!</p>
+  if (!cohorts.length) return <p>Loading!!</p>
   return (
     <div>
+      <CreateClass />
       <HomeTemplate cohorts={cohorts} />
     </div>
   )
