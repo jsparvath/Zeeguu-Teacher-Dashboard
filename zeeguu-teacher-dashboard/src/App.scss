@@ -1,3 +1,35 @@
+@import './shared';
 .App {
   text-align: center;
+}
+
+h1,
+h2,
+h3,
+p,
+a,
+div {
+  color: $color-text-primary;
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+  // font-family: sans-serif;
+}
+
+h1 {
+  font-size: $font-size-large;
+}
+
+h2 {
+  font-size: $font-size-large;
+}
+
+p,
+a,
+div {
+  font-size: $font-size-small;
+}
+
+.color-light {
+  color: $color-text-light;
 }

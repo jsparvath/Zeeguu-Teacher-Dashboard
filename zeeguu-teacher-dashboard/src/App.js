@@ -6,7 +6,7 @@ import Home from './pages/Home'
 import Classroom from './pages/Classroom'
 import StudentActivity from './pages/StudentActivity'
 
-import logo from './logo.svg'
+// import logo from './logo.svg'
 import './App.scss'
 
 const Nav = () => (
