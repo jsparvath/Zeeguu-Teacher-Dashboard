@@ -2,7 +2,20 @@ import React, { useEffect, useState } from 'react'
 import { getCohortsInfo } from '../api/api_endpoints'
 import CreateClass from '../components/CreateClass'
 
-const CohortItem = ({ cohort }) => <div>{cohort.inv_code}</div>
+import './Home.scss'
+
+const CohortItem = ({ cohort }) => (
+  <div className="cohort-card">
+    <p>{cohort.language_name}</p>
+    <p>
+      {cohort.cur_students} / {cohort.max_students}
+    </p>
+
+    <h2>{cohort.name}</h2>
+    <p>{cohort.inv_code}</p>
+    <a href="#">View class ▶️</a>
+  </div>
+)
 
 const HomeTemplate = ({ cohorts }) => (
   <div>
