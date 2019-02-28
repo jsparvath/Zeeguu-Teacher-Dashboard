@@ -5,14 +5,18 @@
   border: none;
   text-decoration: none;
   display: inline-block;
-  margin: 0;
-  padding: 0;
+  padding: $spacing-unit calc(2 * #{$spacing-unit});
 }
 
 .ztd-btn {
   @include button-reset();
   background-color: $color-primary;
   color: $color-text-contrast;
+  font-size: $font-size-medium;
+  &:hover {
+    cursor: pointer;
+  }
+  
 }
 
 .ztd-btn--secondary {
@@ -20,7 +24,7 @@
 }
 
 .ztd-btn--rounded {
-  width: 100px;
-  height: 30px;
+  // width: 100px;
+  // height: 30px;
   border-radius: 22px;
 }
