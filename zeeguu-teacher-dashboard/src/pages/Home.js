@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { getCohortsInfo } from '../api/api_endpoints'
-import CreateClass from '../components/CreateClass'
+import CreateClassButton from '../components/CreateClassButton'
 import Button from '../components/ui/Button'
 import { MdPeople, MdArrowForward } from 'react-icons/md/'
 
@@ -54,7 +54,7 @@ const Home = () => {
   if (!cohorts.length) return <p>Loading!!</p>
   return (
     <div>
-      <CreateClass />
+      <CreateClassButton />
       <HomeTemplate cohorts={cohorts} />
     </div>
   )

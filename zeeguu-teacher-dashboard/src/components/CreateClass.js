@@ -1,24 +1,29 @@
 import React, { useState } from 'react'
+import { createCohort } from '../api/api_endpoints'
+import './createclass.scss'
+import Button from './ui/Button'
 
 const CreateClass = () => {
   const [cohortName, setCohortName] = useState('')
   const [inviteCode, setInviteCode] = useState('')
-  const [languageCode, setLanguageCode] = useState(2)
+  const [languageCode, setLanguageCode] = useState('es')
   const [maxStudents, setMaxStudents] = useState(20)
 
   const submitForm = e => {
     let data = {
       name: cohortName,
       inv_code: inviteCode,
-      language_id: languageCode,
-      max_students: maxStudents
+      max_students: maxStudents,
+      language_id: languageCode
     }
     console.log('submitting')
     console.log('current state:', data)
+    let res = createCohort(data)
+    console.log('res', res)
     e.preventDefault()
   }
   return (
-    <form onSubmit={submitForm}>
+    <form onSubmit={submitForm} className="ztd-form--createClass">
       <input
         type="text"
         placeholder="Name of class"
@@ -38,11 +43,13 @@ const CreateClass = () => {
         onChange={e => setLanguageCode(e.target.value)}
         required
       >
-        <option value="1">German</option>
-        <option value="2">Spanish</option>
-        <option value="3">French</option>
-        <option value="4">Dutch</option>
-        <option value="5">English</option>
+        <option value="de">German</option>
+        <option value="es">Spanish</option>
+        <option value="fr">French</option>
+        <option value="nl">Dutch</option>
+        <option value="en">English</option>
+        <option value="it">Italian</option>
+        <option value="zh-CN">Chinese</option>
       </select>
       <input
         type="number"
@@ -51,7 +58,7 @@ const CreateClass = () => {
         onChange={e => setMaxStudents(e.target.value)}
         required
       />
-      <button type="submit">Create class</button>
+      <Button type="submit">Create class</Button>
     </form>
   )
 }
