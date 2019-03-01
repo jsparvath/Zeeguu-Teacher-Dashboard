@@ -44,7 +44,7 @@ async function _apiPost(endpoint, data) {
     data: { form: data }
   })
 
-  console.log('res', res)
+  return res
 
   // axios
   //   .post(endpoint, { form: data }, { params })

@@ -9,7 +9,11 @@ const CreateClass = () => {
   const [languageCode, setLanguageCode] = useState('es')
   const [maxStudents, setMaxStudents] = useState(20)
 
+  const [errorState, setErrorState] = useState(false)
+
   const submitForm = e => {
+    setErrorState(false)
+
     let data = {
       name: cohortName,
       inv_code: inviteCode,
@@ -18,24 +22,29 @@ const CreateClass = () => {
     }
     console.log('submitting')
     console.log('current state:', data)
-    let res = createCohort(data)
-    console.log('res', res)
+    createCohort(data)
+      .then(res => console.log('RESULT', res))
+      .catch(err => setErrorState(true))
     e.preventDefault()
   }
   return (
     <form onSubmit={submitForm} className="ztd-form--createClass">
-      <input
+      <Input
+        key="lol"
         type="text"
-        placeholder="Name of class"
+        placeholder="eg. Spanish 2019"
+        label="Name of class"
         value={cohortName}
-        onChange={e => setCohortName(e.target.value)}
+        setValue={setCohortName}
         required
       />
-      <input
+      <Input
+        key="wat"
         type="text"
-        placeholder="Invite code"
+        placeholder="eg. spa123"
+        label="Invite code"
         value={inviteCode}
-        onChange={e => setInviteCode(e.target.value)}
+        setValue={setInviteCode}
         required
       />
       <select
@@ -51,15 +60,39 @@ const CreateClass = () => {
         <option value="it">Italian</option>
         <option value="zh-CN">Chinese</option>
       </select>
-      <input
+      <Input
+        key="bla"
         type="number"
-        placeholder="Maximum number of students"
+        placeholder="eg. 25"
+        label="Maximum number of students"
         value={maxStudents}
-        onChange={e => setMaxStudents(e.target.value)}
+        setValue={setMaxStudents}
         required
       />
+      {errorState && <Error />}
       <Button type="submit">Create class</Button>
     </form>
+  )
+}
+
+const Input = ({ label, value, setValue, ...props }) => {
+  return (
+    <>
+      <label>{label}</label>
+      <input
+        value={value}
+        onChange={e => setValue(e.target.value)}
+        {...props}
+      />
+    </>
+  )
+}
+
+const Error = () => {
+  return (
+    <p style={{ color: 'red' }}>
+      A class with that invite code already exists. Please pick another one.
+    </p>
   )
 }
 
