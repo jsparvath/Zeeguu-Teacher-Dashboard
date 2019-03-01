@@ -51,7 +51,7 @@
 
 .cohort-card-icon-people {
   position: relative;
-  top: -3px;
+  top: -2px;
 }
 
 .cohort-card-headline {
@@ -73,6 +73,17 @@
   }
 }
 
+.cohort-card-btn-text {
+  display: flex;
+  align-items: center;
+  color: $color-text-contrast;
+}
+
+.cohort-card-btn-arrow {
+  margin-left: 10px;
+  position: relative;
+  left: 4px;
+}
 
 @media (max-width: 940px) {
   .page-home-content {

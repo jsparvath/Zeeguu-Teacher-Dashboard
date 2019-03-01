@@ -12,7 +12,7 @@ const CohortItem = ({ cohort }) => (
       <p>{cohort.language_name}</p>
       <p className="special">
         {cohort.cur_students}/{cohort.max_students}{' '}
-        <MdPeople className="cohort-card-icon-people" size="26px" />
+        <MdPeople className="cohort-card-icon-people" size="22px" />
       </p>
     </div>
     <h2 className="cohort-card-headline">{cohort.name}</h2>
@@ -20,8 +20,12 @@ const CohortItem = ({ cohort }) => (
       <p className="font-light">invite code: {cohort.inv_code}</p>
       {/* <a href="#">View class </a> */}
       <Button rounded onClick={() => alert('clicked')}>
-        <span className="lol">View class </span>
-        <MdArrowForward className="cohort-card-icon-btn" size="28px" />
+        <div className="cohort-card-btn-text">
+          <span className="font-size-medium">View class </span>
+          <MdArrowForward className="cohort-card-btn-arrow" size="24px" />
+        </div>
+        {/* <span className="lol">View class </span>
+        <MdArrowForward className="cohort-card-icon-btn" size="28px" /> */}
       </Button>
     </div>
   </div>

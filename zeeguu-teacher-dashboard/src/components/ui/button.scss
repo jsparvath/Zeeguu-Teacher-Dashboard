@@ -5,7 +5,7 @@
   border: none;
   text-decoration: none;
   display: inline-block;
-  padding: $spacing-unit calc(2 * #{$spacing-unit});
+  padding: 7px 20px;
 }
 
 .ztd-btn {
@@ -16,7 +16,6 @@
   &:hover {
     cursor: pointer;
   }
-  
 }
 
 .ztd-btn--secondary {
