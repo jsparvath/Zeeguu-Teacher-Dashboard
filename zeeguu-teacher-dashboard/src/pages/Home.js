@@ -19,7 +19,7 @@ const CohortItem = ({ cohort }) => (
     <h2 className="cohort-card-headline">{cohort.name}</h2>
     <div>
       <p className="font-light">invite code: {cohort.inv_code}</p>
-      <Button Component={Link} to="/yo" rounded>
+      <Button Component={Link} to={'/classroom/' + cohort.id} rounded>
         <div className="cohort-card-btn-text">
           <span className="font-size-medium">View class </span>
           <MdArrowForward className="cohort-card-btn-arrow" size="24px" />

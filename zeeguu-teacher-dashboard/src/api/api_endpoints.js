@@ -11,6 +11,17 @@ export function getCohortsInfo() {
   return _apiGet(GET_COHORTS_INFO)
 }
 
+export function getGeneralCohortInfo(classId) {
+  const GET_GENERAL_COHORTS_INFO = BASE_URL + '/cohort_info/' + classId
+  return _apiGet(GET_GENERAL_COHORTS_INFO)
+}
+
+export function getStudents(classId, duration) {
+  const GET_STUDENTS =
+    BASE_URL + '/users_from_cohort/' + classId + '/' + duration
+  return _apiGet(GET_STUDENTS)
+}
+
 export function createCohort(data) {
   const CREATE_COHORT = BASE_URL + '/create_own_cohort'
   return _apiPost(CREATE_COHORT, data)
