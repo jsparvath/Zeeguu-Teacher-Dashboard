@@ -3,10 +3,16 @@ import clsx from 'clsx'
 import './button.scss'
 
 const Button = (
-  { className, rounded = false, secondary = false, ...props },
+  {
+    className,
+    rounded = false,  
+    secondary = false,
+    Component = props => <button {...props} />,
+    ...props
+  },
   ref
 ) => (
-  <button 
+  <Component
     ref={ref}
     className={clsx(className, 'ztd-btn', {
       'ztd-btn--secondary': secondary,
