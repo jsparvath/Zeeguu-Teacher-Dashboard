@@ -14,15 +14,21 @@ const CreateClass = () => {
   const submitForm = e => {
     setErrorState(false)
 
-    let data = {
-      name: cohortName,
-      inv_code: inviteCode,
-      max_students: maxStudents,
-      language_id: languageCode
-    }
+    const form = new FormData()
+    form.append('name', cohortName)
+    form.append('inv_code', inviteCode)
+    form.append('max_students', maxStudents)
+    form.append('language_id', languageCode)
+
+    // let data = {
+    //   name: cohortName,
+    //   inv_code: inviteCode,
+    //   max_students: maxStudents,
+    //   language_id: languageCode
+    // }
     console.log('submitting')
-    console.log('current state:', data)
-    createCohort(data)
+    console.log('current state:', form)
+    createCohort(form)
       .then(res => console.log('RESULT', res))
       .catch(err => setErrorState(true))
     e.preventDefault()

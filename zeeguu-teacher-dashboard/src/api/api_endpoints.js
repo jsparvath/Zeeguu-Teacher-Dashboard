@@ -32,7 +32,7 @@ async function _apiPost(endpoint, data) {
     session: cookies.get('sessionID')
   }
   const headers = {
-    'Content-Type': 'application/json'
+    'Content-Type': 'multipart/form-data'
   }
   console.log('data in post', data)
 
@@ -41,7 +41,7 @@ async function _apiPost(endpoint, data) {
     url: endpoint,
     params: params,
     headers: headers,
-    data: { form: data }
+    data: data
   })
 
   return res
