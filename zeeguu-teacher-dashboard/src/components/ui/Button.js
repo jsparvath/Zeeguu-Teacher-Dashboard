@@ -5,7 +5,7 @@ import './button.scss'
 const Button = (
   {
     className,
-    rounded = false,  
+    rounded = false,
     secondary = false,
     Component = props => <button {...props} />,
     ...props
