@@ -20,7 +20,7 @@ const CreateClassButton = () => {
           >
             <MdClear size="24px" />
           </button>
-          <CreateClass />
+          <CreateClass closemodal={() => setDisplayModal(false)} />
         </Dialog>
       )}
     </div>
