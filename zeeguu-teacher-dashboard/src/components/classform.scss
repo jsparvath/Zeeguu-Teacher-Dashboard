@@ -1,4 +1,4 @@
-.ztd-form--createClass {
+.ztd-form {
   display: flex;
   flex-direction: column;
   max-width: 400px;
@@ -8,7 +8,5 @@
   & input {
     font-size: 30px;
     padding: 20px;
-  }
-  & select {
   }
 }

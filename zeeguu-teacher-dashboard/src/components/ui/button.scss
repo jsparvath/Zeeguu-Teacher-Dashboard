@@ -15,12 +15,18 @@
   font-size: $font-size-medium;
   &:hover {
     cursor: pointer;
-    color: blue;
+    background-color: $color-primary-hover;
   }
 }
 
 .ztd-btn--secondary {
   background-color: $color-secondary;
+}
+.ztd-btn--danger {
+  background-color: $color-danger;
+  &:hover {
+    background-color: $color-danger-hover;
+  }
 }
 
 .ztd-btn--rounded {
