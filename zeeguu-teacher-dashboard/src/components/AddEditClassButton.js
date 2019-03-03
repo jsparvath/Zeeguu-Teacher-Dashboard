@@ -1,16 +1,15 @@
 import React, { useState } from 'react'
-import { Dialog, DialogOverlay, DialogContent } from '@reach/dialog'
+import { Dialog } from '@reach/dialog'
 import { MdClear } from 'react-icons/md/'
 import '@reach/dialog/styles.css'
-import CreateClass from './CreateClass'
 import './modal.scss'
 import Button from './ui/Button'
 
-const CreateClassButton = () => {
+const AddEditClassButton = ({ text, children }) => {
   const [displayModal, setDisplayModal] = useState(false)
   return (
     <div>
-      <Button onClick={() => setDisplayModal(true)}>Create new class</Button>
+      <Button onClick={() => setDisplayModal(true)}>{text}</Button>
       {displayModal && (
         <Dialog className="ztd-modal">
           <button
@@ -20,11 +19,11 @@ const CreateClassButton = () => {
           >
             <MdClear size="24px" />
           </button>
-          <CreateClass closemodal={() => setDisplayModal(false)} />
+          {children(() => setDisplayModal(false))}
         </Dialog>
       )}
     </div>
   )
 }
 
-export default CreateClassButton
+export default AddEditClassButton
