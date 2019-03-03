@@ -1,29 +1,41 @@
 import React, { useState } from 'react'
+import { SpringSpinner } from 'react-epic-spinners'
 import { createCohort } from '../api/api_endpoints'
 import './createclass.scss'
 import Button from './ui/Button'
 
-const CreateClass = () => {
+const CreateClass = ({ closemodal }) => {
   const [cohortName, setCohortName] = useState('')
   const [inviteCode, setInviteCode] = useState('')
   const [languageCode, setLanguageCode] = useState('es')
   const [maxStudents, setMaxStudents] = useState(20)
+  const [isLoading, setIsLoading] = useState(false)
 
   const [errorState, setErrorState] = useState(false)
 
   const submitForm = e => {
     setErrorState(false)
+    setIsLoading(true)
 
-    let data = {
-      name: cohortName,
-      inv_code: inviteCode,
-      max_students: maxStudents,
-      language_id: languageCode
-    }
+    const form = new FormData()
+    form.append('name', cohortName)
+    form.append('inv_code', inviteCode)
+    form.append('max_students', maxStudents)
+    form.append('language_id', languageCode)
+
+    // let data = {
+    //   name: cohortName,
+    //   inv_code: inviteCode,
+    //   max_students: maxStudents,
+    //   language_id: languageCode
+    // }
     console.log('submitting')
-    console.log('current state:', data)
-    createCohort(data)
-      .then(res => console.log('RESULT', res))
+    console.log('current state:', form)
+    createCohort(form)
+      .then(res => {
+        console.log('RESULT', res)
+        setTimeout(() => closemodal(), 2000)
+      })
       .catch(err => setErrorState(true))
     e.preventDefault()
   }
@@ -70,7 +82,12 @@ const CreateClass = () => {
         required
       />
       {errorState && <Error />}
-      <Button type="submit">Create class</Button>
+      <Button
+        type="submit"
+        style={{ display: 'flex', justifyContent: 'center' }}
+      >
+        {isLoading ? <SpringSpinner size="24" /> : 'Create class'}
+      </Button>
     </form>
   )
 }
