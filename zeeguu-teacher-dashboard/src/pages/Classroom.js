@@ -1,6 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useContext, useState } from 'react'
 import './classroom.scss'
 import { getGeneralCohortInfo, getStudents } from '../api/api_endpoints'
+import ClassContext from '../ClassContext'
+import AddEditClassButton from '../components/AddEditClassButton'
+import { EditClass } from '../components/EditClass'
 
 function getLearningProportion(reading_time, exercises_done) {
   if (!(reading_time === 0 && exercises_done === 0)) {
@@ -82,6 +85,10 @@ const Classroom = ({ classId }) => {
   const [cohortInfo, setCohortInfo] = useState([])
   const [students, setStudents] = useState([])
 
+  const test = useContext(ClassContext)
+  const cohort = test.activeClass
+  console.log('cohort', cohort)
+
   useEffect(() => {
     getGeneralCohortInfo(classId).then(({ data }) => {
       setCohortInfo(data)
@@ -94,6 +101,9 @@ const Classroom = ({ classId }) => {
 
   return (
     <div>
+      <AddEditClassButton text="Edit class">
+        {closemodal => <EditClass closemodal={closemodal} />}
+      </AddEditClassButton>
       I am the classroom with id {classId}
       {students.length === 0 ? (
         <>

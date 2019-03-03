@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import { SpringSpinner } from 'react-epic-spinners'
 import { createCohort } from '../api/api_endpoints'
-import './createclass.scss'
+import './classform.scss'
 import Button from './ui/Button'
+import Input from './ui/Input'
 
 const CreateClass = ({ closemodal }) => {
   const [cohortName, setCohortName] = useState('')
@@ -23,12 +24,15 @@ const CreateClass = ({ closemodal }) => {
     form.append('max_students', maxStudents)
     form.append('language_id', languageCode)
 
-    // let data = {
+    // use this to manually add the newly created class without refreshing the page
+    // const data = {
     //   name: cohortName,
     //   inv_code: inviteCode,
     //   max_students: maxStudents,
     //   language_id: languageCode
     // }
+    // console.log('data:', data)
+    // add(data)
     console.log('submitting')
     console.log('current state:', form)
     createCohort(form)
@@ -40,9 +44,8 @@ const CreateClass = ({ closemodal }) => {
     e.preventDefault()
   }
   return (
-    <form onSubmit={submitForm} className="ztd-form--createClass">
+    <form onSubmit={submitForm} className="ztd-form">
       <Input
-        key="lol"
         type="text"
         placeholder="eg. Spanish 2019"
         label="Name of class"
@@ -51,7 +54,6 @@ const CreateClass = ({ closemodal }) => {
         required
       />
       <Input
-        key="wat"
         type="text"
         placeholder="eg. spa123"
         label="Invite code"
@@ -73,7 +75,6 @@ const CreateClass = ({ closemodal }) => {
         <option value="zh-CN">Chinese</option>
       </select>
       <Input
-        key="bla"
         type="number"
         placeholder="eg. 25"
         label="Maximum number of students"
@@ -86,22 +87,9 @@ const CreateClass = ({ closemodal }) => {
         type="submit"
         style={{ display: 'flex', justifyContent: 'center' }}
       >
-        {isLoading ? <SpringSpinner size="24" /> : 'Create class'}
+        {isLoading ? <SpringSpinner size={24} /> : 'Create class'}
       </Button>
     </form>
-  )
-}
-
-const Input = ({ label, value, setValue, ...props }) => {
-  return (
-    <>
-      <label>{label}</label>
-      <input
-        value={value}
-        onChange={e => setValue(e.target.value)}
-        {...props}
-      />
-    </>
   )
 }
 

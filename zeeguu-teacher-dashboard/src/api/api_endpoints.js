@@ -27,21 +27,31 @@ export function createCohort(data) {
   return _apiPost(CREATE_COHORT, data)
 }
 
-async function _apiGet(endpoint) {
+export function deleteCohort(id) {
+  const DELETE_COHORT = BASE_URL + `/remove_cohort/${id}`
+  return _apiPost(DELETE_COHORT, id)
+}
+export function updateCohort(data, id) {
+  const EDIT_COHORT = BASE_URL + `/update_cohort/${id}`
+  return _apiPost(EDIT_COHORT, data)
+}
+
+const setParams = () => {
   const cookies = new universalCookies()
-  const params = {
+  return {
     session: cookies.get('sessionID')
   }
+}
+
+async function _apiGet(endpoint) {
+  const params = setParams()
   const res = await axios.get(endpoint, { params })
   // console.log(res)
   return res
 }
 
 async function _apiPost(endpoint, data) {
-  const cookies = new universalCookies()
-  const params = {
-    session: cookies.get('sessionID')
-  }
+  const params = setParams()
   const headers = {
     'Content-Type': 'multipart/form-data'
   }
@@ -56,9 +66,4 @@ async function _apiPost(endpoint, data) {
   })
 
   return res
-
-  // axios
-  //   .post(endpoint, { form: data }, { params })
-  //   .then(res => console.log('result', res))
-  //   .catch(err => console.log('error', err))
 }
