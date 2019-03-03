@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import './classroom.scss'
 import { getGeneralCohortInfo, getStudents } from '../api/api_endpoints'
 
 function getLearningProportion(reading_time, exercises_done) {
@@ -46,17 +47,34 @@ function transformStudents(students) {
   return transformedStudents
 }
 const ClassroomTemplate = ({ cohortName, cohortCode, students }) => (
-  <div>
+  <div className="page-classroom">
     Class Name: {cohortName} Class code: {cohortCode}
+    {/* 
+    No table element is used because that each row is a link. 
+    implementing that functionality with table is very complex, and also bad for accessibility reasons. 
+    Therefore an unordered list is used
+    */}
+    <div className="ztd-student-table--header">
+      <p>NAME</p>
+      <p>TIME SPENT</p>
+      <p>ACTIVITY</p>
+    </div>
     <ul>
-      {students.map(student => (
-        <li key={student.id}>
-          <a href="">
-            <h2>{student.name}</h2>
-            <p>{student.learning_proportion}</p>
-          </a>
-        </li>
-      ))}
+      {students.map(student => {
+        return (
+          <li className="ztd-student-table--item" key={student.id}>
+            <a className="ztd-student-table--link" href="#">
+              <p>{student.name}</p>
+              <p>
+                {student.total_time / 3600}h {(student.total_time / 60) % 60}m
+              </p>
+              {/* Vj {{ ((student.exercises_done + student.reading_time)/3600)|int }} h
+                                {{ (((student.exercises_done + student.reading_time)/60)%60)|int }} m */}
+              <p>{student.learning_proportion}</p>
+            </a>
+          </li>
+        )
+      })}
     </ul>
   </div>
 )
@@ -66,16 +84,14 @@ const Classroom = ({ classId }) => {
 
   useEffect(() => {
     getGeneralCohortInfo(classId).then(({ data }) => {
-      // console.log(data)
       setCohortInfo(data)
     })
     getStudents(classId, 9).then(({ data }) => {
       const students = transformStudents(data)
-      console.log(students)
-
       setStudents(students)
     })
   }, [])
+
   return (
     <div>
       I am the classroom with id {classId}

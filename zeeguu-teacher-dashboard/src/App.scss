@@ -8,6 +8,8 @@ h2,
 h3,
 p,
 a,
+ul,
+li,
 button,
 div {
   font-family: 'Roboto', sans-serif;
@@ -20,6 +22,10 @@ a,
 button,
 div {
   color: $color-text-primary-light;
+}
+
+ul {
+  list-style-type: none;
 }
 
 h1,
@@ -39,6 +45,10 @@ p,
 a,
 div {
   font-size: $font-size-small;
+}
+
+a {
+  text-decoration: none;
 }
 
 .color-light {
