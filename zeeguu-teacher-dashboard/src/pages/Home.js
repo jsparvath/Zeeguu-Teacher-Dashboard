@@ -44,7 +44,6 @@ const Home = () => {
 
   useEffect(() => {
     getCohortsInfo().then(({ data }) => {
-      console.log(data)
       setCohortsInfo(data)
     })
   }, [])

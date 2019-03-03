@@ -1,6 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import './classroom.scss'
 import { getGeneralCohortInfo, getStudents } from '../api/api_endpoints'
+import {
+  LTBody,
+  LTHead,
+  LTHeadItem,
+  LTRow,
+  LTData,
+  ListTable
+} from '../components/ui/ListTable'
 
 function getLearningProportion(reading_time, exercises_done) {
   if (!(reading_time === 0 && exercises_done === 0)) {
@@ -46,38 +54,45 @@ function transformStudents(students) {
   )
   return transformedStudents
 }
-const ClassroomTemplate = ({ cohortName, cohortCode, students }) => (
-  <div className="page-classroom">
-    Class Name: {cohortName} Class code: {cohortCode}
-    {/* 
-    No table element is used because that each row is a link. 
-    implementing that functionality with table is very complex, and also bad for accessibility reasons. 
-    Therefore an unordered list is used
-    */}
-    <div className="ztd-student-table--header">
-      <p>NAME</p>
-      <p>TIME SPENT</p>
-      <p>ACTIVITY</p>
-    </div>
-    <ul>
-      {students.map(student => {
-        return (
-          <li className="ztd-student-table--item" key={student.id}>
-            <a className="ztd-student-table--link" href="#">
+const ClassroomTemplate = ({ cohortName, cohortCode, students }) => {
+  const listTable = (
+    <ListTable>
+      <LTHead items="jo">
+        <LTHeadItem width="25" isSortable>
+          NAME
+        </LTHeadItem>
+        <LTHeadItem width="25" isSortable>
+          TIME SPENT
+        </LTHeadItem>
+        <LTHeadItem width="50">ACTIVITY</LTHeadItem>
+      </LTHead>
+      <LTBody items="jo">
+        {students.map(student => (
+          <LTRow>
+            <LTData sortingValue={student.name} sortingType="string">
               <p>{student.name}</p>
+            </LTData>
+            <LTData sortingValue={student.total_time} sortingType="number">
               <p>
                 {student.total_time / 3600}h {(student.total_time / 60) % 60}m
               </p>
-              {/* Vj {{ ((student.exercises_done + student.reading_time)/3600)|int }} h
-                                {{ (((student.exercises_done + student.reading_time)/60)%60)|int }} m */}
+            </LTData>
+            <LTData>
               <p>{student.learning_proportion}</p>
-            </a>
-          </li>
-        )
-      })}
-    </ul>
-  </div>
-)
+            </LTData>
+          </LTRow>
+        ))}
+      </LTBody>
+    </ListTable>
+  )
+  // console.log(listTable)
+  return (
+    <div className="page-classroom">
+      Class Name: {cohortName} Class code: {cohortCode}
+      {listTable}
+    </div>
+  )
+}
 const Classroom = ({ classId }) => {
   const [cohortInfo, setCohortInfo] = useState([])
   const [students, setStudents] = useState([])

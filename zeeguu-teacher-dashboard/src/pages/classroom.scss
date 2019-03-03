@@ -7,8 +7,6 @@
 }
 .ztd-student-table--header,
 .ztd-student-table--link {
-  padding: calc(4 * #{$spacing-unit}) 0 calc(4 * #{$spacing-unit})
-    calc(4 * #{$spacing-unit});
   display: flex;
   text-align: left;
   & > * {
@@ -53,5 +51,20 @@
       color: $color-text-primary-light;
       font-weight: $font-weight-bold;
     }
+  }
+}
+
+.ztd-student-table--cell {
+  padding: calc(4 * #{$spacing-unit}) 0;
+  &:nth-child(1) {
+    padding: calc(4 * #{$spacing-unit}) 0 calc(4 * #{$spacing-unit})
+      calc(4 * #{$spacing-unit});
+  }
+}
+.ztd-student-table--is-sortable {
+  // background: blue;
+  height: 100%;
+  &:hover {
+    cursor: pointer;
   }
 }
