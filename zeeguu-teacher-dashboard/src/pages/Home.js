@@ -1,20 +1,15 @@
 import React, { useEffect, useState, useContext } from 'react'
+
 import { Link } from '@reach/router'
 import { getCohortsInfo } from '../api/api_endpoints'
-import CreateClass from '../components/CreateClass'
+
+import AddClassForm from '../components/AddClassForm'
 import Button from '../components/ui/Button'
 import { MdPeople, MdArrowForward } from 'react-icons/md/'
 import ClassContext from '../ClassContext'
-
 import './Home.scss'
-import AddEditClassButton from '../components/AddEditClassButton'
 
-import {
-  Dialog,
-  DialogContent,
-  TextField,
-  Button as Buttoooon
-} from '@material-ui/core'
+import { Dialog, DialogContent, Button as Buttoooon } from '@material-ui/core'
 
 const CohortItem = ({ cohort }) => {
   const ctx = useContext(ClassContext)
@@ -77,31 +72,18 @@ const Home = () => {
 
   return (
     <div>
-      <Buttoooon onClick={() => setIsOpen(true)}>Add Claaaas</Buttoooon>
+      <Buttoooon
+        color="primary"
+        variant="contained"
+        onClick={() => setIsOpen(true)}
+      >
+        Create new class
+      </Buttoooon>
       <Dialog open={isOpen} onClose={() => setIsOpen(false)}>
         <DialogContent>
-          <TextField
-            id="invite_code"
-            label="Invite Code"
-            fullWidth
-            type="text"
-            required
-          />
-          {/* <Input
-        type="text"
-        placeholder="eg. spa123"
-        label="Invite code"
-        value={inviteCode}
-        setValue={setInviteCode}
-        required */}
+          <AddClassForm closemodal={() => setIsOpen(false)} />
         </DialogContent>
       </Dialog>
-      {/* <AddClassForm></AddClassForm>
-      <EditClassForm></EditClassForm> */}
-      <button />
-      <AddEditClassButton text="Create new class">
-        {closemodal => <CreateClass closemodal={closemodal} />}
-      </AddEditClassButton>
       {cohorts.length ? <HomeTemplate cohorts={cohorts} /> : <p>Loading</p>}
     </div>
   )
