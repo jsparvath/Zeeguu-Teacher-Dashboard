@@ -5,6 +5,8 @@ import './classform.scss'
 import Button from './ui/Button'
 import Input from './ui/Input'
 
+
+
 const CreateClass = ({ closemodal }) => {
   const [cohortName, setCohortName] = useState('')
   const [inviteCode, setInviteCode] = useState('')
