@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import clsx from 'clsx'
 
 function compareString(a, b) {}
 
@@ -6,45 +7,103 @@ function compareString(a, b) {}
 // implementing that functionality with table is very complex, and also bad for accessibility reasons.
 // Therefore an unordered list is used
 export const ListTable = ({ children }) => {
-  const _headItems = children.find(child => child.type.name === 'LTHead').props
-    .children
+  const [sortingInfo, setSortingInfo] = useState({
+    sortingIndex: '',
+    reverse: false
+  })
+
+  const transformedChildren = React.Children.map(children, child => {
+    if (child.type.name === 'LTHead') {
+      return React.cloneElement(child, {
+        children: child.props.children.map((headItem, index) => {
+          let transformedItem = headItem.props.isSortable
+            ? React.cloneElement(headItem, {
+                onClick: () => {
+                  const isReverse =
+                    sortingInfo.sortingIndex == index
+                      ? !sortingInfo.reverse
+                      : false
+                  setSortingInfo({
+                    sortingIndex: index,
+                    reverse: isReverse
+                  })
+                }
+              })
+            : headItem
+          return transformedItem
+        })
+      })
+    } else {
+      return child
+    }
+  })
+
+  // const _headItems = children
+  //   .find(child => child.type.name === 'LTHead')
+  //   .props.children.map((headItem, index) => {
+  //     let transformedItem = headItem.props.isSortable
+  //       ? React.cloneElement(headItem, {
+  //           onClick: () => alert('bla')
+  //         })
+  //       : headItem
+  //     // console.log(index)
+  //     // console.log(headItem)
+  //     return transformedItem
+  //   })
+
   const _bodyItems = children.find(child => child.type.name === 'LTBody').props
     .children
-  console.log(_headItems)
-  console.log(_bodyItems)
-  const [sortingInfo, setSortingInfo] = useState(null)
-  const [headItems, setHeadItems] = useState(_headItems)
+  // console.log(_headItems)
+  // console.log(_bodyItems)
+  // const [headItems, setHeadItems] = useState(_headItems)
   const [bodyItems, setBodyItems] = useState(_bodyItems)
 
   useEffect(() => {
-    if (sortingInfo) {
+    console.log(sortingInfo)
+    if (sortingInfo.sortingIndex || sortingInfo.sortingIndex === 0) {
+      const sortedItems = [...bodyItems].sort((a, b) => {
+        const sortingValueA =
+          a.props.children[sortingInfo.sortingIndex].props.sortingValue
+        const sortingValueB =
+          b.props.children[sortingInfo.sortingIndex].props.sortingValue
+        const sortingType =
+          b.props.children[sortingInfo.sortingIndex].props.sortinType
+        if (sortingType === 'string') {
+          return sortingValueA.toLowerCase().localeCompare(b.toLowerCase())
+        } else {
+          return sortingValueA - sortingValueB
+        }
+      })
+      if (sortingInfo.reverse) {
+        console.log(sortedItems.reverse())
+      } else {
+        console.log(sortedItems)
+      }
       // const sortingFunction =
       // const sorted = bodyItems.sort((a,b) =>  )
     }
   }, [sortingInfo])
 
-  return <div>{children}</div>
+  return <div>{transformedChildren}</div>
 }
 
 export const LTHead = ({ children }) => {
   return <div className="ztd-student-table--header">{children}</div>
 }
-export const LTHeadItem = ({ children, isSortable = false }) => {
-  return isSortable ? (
-    <p
-      className="ztd-student-table--is-sortable
-      ztd-student-table--cell 
-      "
-      onClick={() => {
-        console.log('clicked')
-      }}
-    >
-      {children}
-    </p>
-  ) : (
-    <p className="ztd-student-table--cell">{children}</p>
-  )
-}
+export const LTHeadItem = ({
+  children,
+  isSortable = false,
+  onClick = null
+}) => (
+  <p
+    className={clsx('ztd-student-table--cell', {
+      'ztd-student-table--is-sortable': isSortable
+    })}
+    onClick={onClick}
+  >
+    {children}
+  </p>
+)
 export const LTBody = ({ children }) => {
   return <ul>{children}</ul>
 }
