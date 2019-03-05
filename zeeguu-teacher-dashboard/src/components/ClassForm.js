@@ -19,13 +19,13 @@ import {
   SnackbarContent
 } from '@material-ui/core'
 
-const ClassForm = ({ isEditing, cohort, closemodal }) => {
+const ClassForm = ({ primaryButtonText, cohort, closemodal }) => {
   const [errorState, setErrorState] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const inputLabelRef = React.useRef(null)
   let curState = {}
   // If the form is being edited it already has data, so fill the inputs with that
-  if (isEditing) {
+  if (cohort) {
     curState = {
       id: cohort.id,
       class_name: cohort.name,
@@ -75,7 +75,7 @@ const ClassForm = ({ isEditing, cohort, closemodal }) => {
 
     const form = setupForm()
 
-    if (isEditing) {
+    if (cohort) {
       updateCohort(form, cohort.id)
         .then(res => {
           console.log('RESULT', res)
@@ -126,11 +126,11 @@ const ClassForm = ({ isEditing, cohort, closemodal }) => {
           fullWidth
           type="number"
           required
-          disabled={isEditing}
+          disabled={cohort}
         />
         <FormControl
           fullWidth
-          disabled={isEditing}
+          disabled={cohort}
           required
           style={{ minWidth: 120 }}
         >
@@ -161,10 +161,10 @@ const ClassForm = ({ isEditing, cohort, closemodal }) => {
           variant="contained"
           color="primary"
         >
-          {isLoading ? <SpringSpinner size={24} /> : 'Update class'}
+          {isLoading ? <SpringSpinner size={24} /> : primaryButtonText}
         </Button>
       </form>
-      {isEditing && <DangerZone id={cohort.id} />}
+      {cohort && <DangerZone id={cohort.id} />}
     </div>
   )
 }

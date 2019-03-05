@@ -134,7 +134,7 @@ const Classroom = ({ classId }) => {
               closemodal={() => setIsOpen(false)}
 						/> */}
             <ClassForm
-              isEditing={true}
+              primaryButtonText="Update Class"
               cohort={cohortInfo}
               closemodal={() => setIsOpen(false)}
             />

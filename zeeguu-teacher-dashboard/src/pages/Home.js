@@ -1,19 +1,15 @@
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { Link } from '@reach/router'
 import { getCohortsInfo } from '../api/api_endpoints'
 
-import AddClassForm from '../components/AddClassForm'
-import Button from '../components/ui/Button'
-import { MdPeople, MdArrowForward } from 'react-icons/md/'
-import ClassContext from '../ClassContext'
+import { MdPeople, MdArrowForward, MdAddCircle } from 'react-icons/md/'
 import './Home.scss'
 
-import { Dialog, DialogContent, Button as Buttoooon } from '@material-ui/core'
+import { Dialog, DialogContent, Button } from '@material-ui/core'
 import ClassForm from '../components/ClassForm'
 
 const CohortItem = ({ cohort }) => {
-  const ctx = useContext(ClassContext)
   return (
     <div className="cohort-card">
       <div>
@@ -27,32 +23,49 @@ const CohortItem = ({ cohort }) => {
       <div>
         <p className="font-light">invite code: {cohort.inv_code}</p>
         <Button
-          Component={Link}
+          variant="contained"
+          color="primary"
+          component={Link}
           to={`/classroom/${cohort.id}`}
-          rounded
-          onClick={() => {
-            ctx.setActiveClass(cohort)
-          }}
         >
-          <div className="cohort-card-btn-text">
-            <span className="font-size-medium">View class </span>
-            <MdArrowForward className="cohort-card-btn-arrow" size="24px" />
-          </div>
-        </Button>
+          View class
+          <MdArrowForward className="cohort-card-btn-arrow" size="18px" />
+        </Button>{' '}
       </div>
     </div>
   )
 }
 
-const HomeTemplate = ({ cohorts }) => (
-  <div className="page-home">
-    <div className="page-home-content">
-      {cohorts.map(cohort => (
-        <CohortItem key={cohort.id} cohort={cohort} />
-      ))}
+const HomeTemplate = ({ cohorts }) => {
+  const [isOpen, setIsOpen] = useState(false)
+
+  return (
+    <div className="page-home">
+      <div className="page-home-content">
+        {cohorts.map(cohort => (
+          <CohortItem key={cohort.id} cohort={cohort} />
+        ))}
+        <Button
+          style={{ minHeight: 200 }}
+          color="primary"
+          variant="contained"
+          onClick={() => setIsOpen(true)}
+        >
+          <MdAddCircle size="48px" />
+        </Button>
+        <Dialog open={isOpen} onClose={() => setIsOpen(false)}>
+          <DialogContent>
+            {/* <AddClassForm closemodal={() => setIsOpen(false)} /> */}
+            <ClassForm
+              primaryButtonText="Create Class"
+              closemodal={() => setIsOpen(false)}
+            />
+          </DialogContent>
+        </Dialog>
+      </div>
     </div>
-  </div>
-)
+  )
+}
 
 const Home = () => {
   const [cohorts, setCohortsInfo] = useState([])
@@ -73,19 +86,6 @@ const Home = () => {
 
   return (
     <div>
-      <Buttoooon
-        color="primary"
-        variant="contained"
-        onClick={() => setIsOpen(true)}
-      >
-        Create new class
-      </Buttoooon>
-      <Dialog open={isOpen} onClose={() => setIsOpen(false)}>
-        <DialogContent>
-          {/* <AddClassForm closemodal={() => setIsOpen(false)} /> */}
-          <ClassForm closemodal={() => setIsOpen(false)} />
-        </DialogContent>
-      </Dialog>
       {cohorts.length ? <HomeTemplate cohorts={cohorts} /> : <p>Loading</p>}
     </div>
   )
