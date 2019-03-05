@@ -1,0 +1,28 @@
+@import '../shared.scss';
+
+nav {
+  display: flex;
+  // justify-content: center;
+  align-items: center;
+  // border-bottom: 2px solid grey;
+  padding: 15px;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  background-color: white;
+
+  & a {
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+  }
+}
+
+.logo {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+}
+
+.link-text {
+  color: $color-link;
+  font-size: $font-size-medium;
+}
