@@ -10,6 +10,7 @@ import ClassContext from '../ClassContext'
 import './Home.scss'
 
 import { Dialog, DialogContent, Button as Buttoooon } from '@material-ui/core'
+import ClassForm from '../components/ClassForm'
 
 const CohortItem = ({ cohort }) => {
   const ctx = useContext(ClassContext)
@@ -81,7 +82,8 @@ const Home = () => {
       </Buttoooon>
       <Dialog open={isOpen} onClose={() => setIsOpen(false)}>
         <DialogContent>
-          <AddClassForm closemodal={() => setIsOpen(false)} />
+          {/* <AddClassForm closemodal={() => setIsOpen(false)} /> */}
+          <ClassForm closemodal={() => setIsOpen(false)} />
         </DialogContent>
       </Dialog>
       {cohorts.length ? <HomeTemplate cohorts={cohorts} /> : <p>Loading</p>}

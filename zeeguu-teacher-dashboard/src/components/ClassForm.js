@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 import { navigate } from '@reach/router'
+import { createCohort } from '../api/api_endpoints'
 import { updateCohort } from '../api/api_endpoints'
 import { deleteCohort } from '../api/api_endpoints'
 
@@ -13,22 +14,37 @@ import {
   InputLabel,
   MenuItem,
   FormControl,
-  Select
+  Select,
+  Snackbar,
+  SnackbarContent
 } from '@material-ui/core'
 
-const EditClassForm = ({ cohort, closemodal }) => {
+const ClassForm = ({ isEditing, cohort, closemodal }) => {
   const [errorState, setErrorState] = useState(false)
-
-  const [state, setState] = useState({
-    id: cohort.id,
-    class_name: cohort.name,
-    invite_code: cohort.inv_code,
-    language_id: languageMap[cohort.language_name],
-    max_students: cohort.max_students,
-    labelWidth: 0
-  })
   const [isLoading, setIsLoading] = useState(false)
   const inputLabelRef = React.useRef(null)
+  let curState = {}
+  // If the form is being edited it already has data, so fill the inputs with that
+  if (isEditing) {
+    curState = {
+      id: cohort.id,
+      class_name: cohort.name,
+      invite_code: cohort.inv_code,
+      language_id: languageMap[cohort.language_name],
+      max_students: cohort.max_students,
+      labelWidth: 0
+    }
+  } else {
+    curState = {
+      class_name: '',
+      invite_code: '',
+      language_id: 'es',
+      max_students: 20,
+      labelWidth: 0
+    }
+  }
+
+  const [state, setState] = useState(curState)
 
   React.useEffect(() => {
     setState({
@@ -44,27 +60,42 @@ const EditClassForm = ({ cohort, closemodal }) => {
     })
   }
 
-  function submitForm(event) {
-    console.log('submitting')
-    setErrorState(false)
-    setIsLoading(true)
-    console.log('current state', state)
+  function setupForm() {
     const form = new FormData()
     form.append('name', state.class_name)
     form.append('inv_code', state.invite_code)
     form.append('max_students', state.max_students)
     form.append('language_id', state.language_id)
-    updateCohort(form, cohort.id)
-      .then(res => {
-        console.log('RESULT', res)
-        setTimeout(() => closemodal(), 2000)
-      })
-      .catch(err => setErrorState(true))
+    return form
+  }
+
+  function submitForm(event) {
+    setErrorState(false)
+    setIsLoading(true)
+
+    const form = setupForm()
+
+    if (isEditing) {
+      updateCohort(form, cohort.id)
+        .then(res => {
+          console.log('RESULT', res)
+          setTimeout(() => closemodal(), 2000)
+        })
+        .catch(err => setErrorState(true))
+    } else {
+      createCohort(form)
+        .then(res => {
+          console.log('RESULT', res)
+          setTimeout(() => closemodal(), 2000)
+        })
+        .catch(err => setErrorState(true))
+    }
     event.preventDefault()
   }
 
   return (
     <div>
+      <MySnackbar />
       <form onSubmit={submitForm} style={{ display: 'flex', flexWrap: 'wrap' }}>
         <TextField
           value={state.class_name}
@@ -95,9 +126,14 @@ const EditClassForm = ({ cohort, closemodal }) => {
           fullWidth
           type="number"
           required
-          disabled
+          disabled={isEditing}
         />
-        <FormControl fullWidth disabled required style={{ minWidth: 120 }}>
+        <FormControl
+          fullWidth
+          disabled={isEditing}
+          required
+          style={{ minWidth: 120 }}
+        >
           <InputLabel ref={inputLabelRef} htmlFor="language_id">
             Language
           </InputLabel>
@@ -118,7 +154,7 @@ const EditClassForm = ({ cohort, closemodal }) => {
             <MenuItem value={'zh-CN'}>Chinese</MenuItem>
           </Select>
         </FormControl>
-        {errorState && <Error />}
+        {errorState && <Error setLoading={setIsLoading} />}
         <Button
           style={{ marginTop: 10 }}
           type="submit"
@@ -128,12 +164,61 @@ const EditClassForm = ({ cohort, closemodal }) => {
           {isLoading ? <SpringSpinner size={24} /> : 'Update class'}
         </Button>
       </form>
-      <DangerZone id={cohort.id} />
+      {isEditing && <DangerZone id={cohort.id} />}
     </div>
   )
 }
 
-const Error = () => {
+const MySnackbar = () => {
+  const [open, setOpen] = React.useState(false)
+
+  function handleClick() {
+    setOpen(true)
+  }
+
+  function handleClose(event, reason) {
+    if (reason === 'clickaway') {
+      return
+    }
+
+    setOpen(false)
+  }
+
+  return (
+    <div>
+      <Button onClick={handleClick}>Open simple snackbar</Button>
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left'
+        }}
+        open={open}
+        autoHideDuration={6000}
+        onClose={handleClose}
+      >
+        <SnackbarContent
+          style={{ backgroundColor: 'green' }}
+          aria-describedby="client-snackbar"
+          message={
+            <span
+              id="client-snackbar"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                color: 'white'
+              }}
+            >
+              Test hello
+            </span>
+          }
+        />
+      </Snackbar>
+    </div>
+  )
+}
+
+const Error = ({ setLoading }) => {
+  setLoading(false)
   return (
     <p style={{ color: 'red' }}>
       A class with that invite code already exists. Please pick another one.
@@ -167,4 +252,4 @@ const DangerZone = ({ id }) => {
   )
 }
 
-export default EditClassForm
+export default ClassForm

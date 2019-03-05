@@ -4,6 +4,8 @@ import { getGeneralCohortInfo, getStudents } from '../api/api_endpoints'
 
 import { Dialog, DialogContent, Button as Buttoooon } from '@material-ui/core'
 
+import ClassForm from '../components/ClassForm'
+
 import EditClassFrom from '../components/EditClassForm'
 
 import ClassContext from '../ClassContext'
@@ -127,7 +129,12 @@ const Classroom = ({ classId }) => {
         </Buttoooon>
         <Dialog open={isOpen} onClose={() => setIsOpen(false)}>
           <DialogContent>
-            <EditClassFrom
+            {/* <EditClassFrom
+              cohort={cohortInfo}
+              closemodal={() => setIsOpen(false)}
+						/> */}
+            <ClassForm
+              isEditing={true}
               cohort={cohortInfo}
               closemodal={() => setIsOpen(false)}
             />
