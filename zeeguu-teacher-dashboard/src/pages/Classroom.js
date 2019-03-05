@@ -4,10 +4,13 @@ import { getGeneralCohortInfo, getStudents } from '../api/api_endpoints'
 
 import { Link } from '@reach/router'
 import ClassContext from '../ClassContext'
-import AddEditClassButton from '../components/AddEditClassButton'
-import { EditClass } from '../components/EditClass'
+
 import { ListTable } from '../components/ui/ListTable'
 import { addTotalAndNormalizedTime, getProportion } from '../utilities/helpers'
+
+import { Dialog, DialogContent, Button as Buttoooon } from '@material-ui/core'
+
+import EditClassFrom from '../components/EditClassForm'
 
 function transformStudents(students) {
   let maxActivity = 0
@@ -78,9 +81,7 @@ const ClassroomTemplate = ({ cohortName, cohortCode, students }) => {
 const Classroom = ({ classId }) => {
   const [cohortInfo, setCohortInfo] = useState([])
   const [students, setStudents] = useState([])
-
-  const test = useContext(ClassContext)
-  const cohort = test.activeClass
+  const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
     getGeneralCohortInfo(classId).then(({ data }) => {
@@ -94,15 +95,31 @@ const Classroom = ({ classId }) => {
 
   return (
     <div>
-      <AddEditClassButton text="Edit class">
-        {closemodal => <EditClass closemodal={closemodal} />}
-      </AddEditClassButton>
+      <h3>{cohortInfo.name}</h3>
+      <div>
+        <Buttoooon
+          color="primary"
+          variant="contained"
+          onClick={() => setIsOpen(true)}
+        >
+          Edit class
+        </Buttoooon>
+        <Dialog open={isOpen} onClose={() => setIsOpen(false)}>
+          <DialogContent>
+            <EditClassFrom
+              cohort={cohortInfo}
+              closemodal={() => setIsOpen(false)}
+            />
+          </DialogContent>
+        </Dialog>
+      </div>
       I am the classroom with id {classId}
       {students.length === 0 ? (
         <>
           <p> This class has no students</p>
           <p>
-            Students can join this class by using the invite code: josn-2019-itu
+            Students can join this class by using the invite code:{' '}
+            {cohortInfo.inv_code}
           </p>
         </>
       ) : (
