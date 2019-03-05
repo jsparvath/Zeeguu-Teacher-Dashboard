@@ -5,8 +5,6 @@ import './classform.scss'
 import Button from './ui/Button'
 import Input from './ui/Input'
 
-
-
 const CreateClass = ({ closemodal }) => {
   const [cohortName, setCohortName] = useState('')
   const [inviteCode, setInviteCode] = useState('')
@@ -33,13 +31,9 @@ const CreateClass = ({ closemodal }) => {
     //   max_students: maxStudents,
     //   language_id: languageCode
     // }
-    // console.log('data:', data)
     // add(data)
-    console.log('submitting')
-    console.log('current state:', form)
     createCohort(form)
       .then(res => {
-        console.log('RESULT', res)
         setTimeout(() => closemodal(), 2000)
       })
       .catch(err => setErrorState(true))

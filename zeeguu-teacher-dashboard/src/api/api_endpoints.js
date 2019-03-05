@@ -46,7 +46,6 @@ const setParams = () => {
 async function _apiGet(endpoint) {
   const params = setParams()
   const res = await axios.get(endpoint, { params })
-  // console.log(res)
   return res
 }
 
@@ -55,7 +54,6 @@ async function _apiPost(endpoint, data) {
   const headers = {
     'Content-Type': 'multipart/form-data'
   }
-  console.log('data in post', data)
 
   const res = await axios({
     method: 'post',

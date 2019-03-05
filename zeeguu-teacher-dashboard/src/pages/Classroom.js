@@ -2,49 +2,18 @@ import React, { useEffect, useContext, useState } from 'react'
 import './classroom.scss'
 import { getGeneralCohortInfo, getStudents } from '../api/api_endpoints'
 
+import { Link } from '@reach/router'
 import ClassContext from '../ClassContext'
 import AddEditClassButton from '../components/AddEditClassButton'
 import { EditClass } from '../components/EditClass'
-import {
-  LTBody,
-  LTHead,
-  LTHeadItem,
-  LTRow,
-  LTData,
-  ListTable
-} from '../components/ui/ListTable'
-
-function getLearningProportion(reading_time, exercises_done) {
-  if (!(reading_time === 0 && exercises_done === 0)) {
-    return (100 * reading_time) / (exercises_done + reading_time)
-  } else if (reading_time === 0 && exercises_done === 0) {
-    return 0
-  } else if (reading_time === 0) {
-    return 0
-  } else {
-    return 100
-  }
-}
-
-function addTotalAndNormalizedTime(student, maxActivity) {
-  if (maxActivity > 0) {
-    return {
-      ...student,
-      normalized_activity_proportion: (student.total_time / maxActivity) * 100
-    }
-  } else {
-    return student
-  }
-}
+import { ListTable } from '../components/ui/ListTable'
+import { addTotalAndNormalizedTime, getProportion } from '../utilities/helpers'
 
 function transformStudents(students) {
   let maxActivity = 0
   let transformedStudents = students.map(student => {
     const { reading_time, exercises_done } = student
-    const learning_proportion = getLearningProportion(
-      reading_time,
-      exercises_done
-    )
+    const learning_proportion = getProportion(reading_time, exercises_done)
     const total_time = reading_time + exercises_done
     maxActivity = maxActivity > total_time ? maxActivity : total_time
     return {
@@ -59,41 +28,50 @@ function transformStudents(students) {
   return transformedStudents
 }
 const ClassroomTemplate = ({ cohortName, cohortCode, students }) => {
-  const listTable = (
-    <ListTable>
-      <LTHead items="jo">
-        <LTHeadItem width="25" isSortable>
-          NAME
-        </LTHeadItem>
-        <LTHeadItem width="25" isSortable>
-          TIME SPENT
-        </LTHeadItem>
-        <LTHeadItem width="50">ACTIVITY</LTHeadItem>
-      </LTHead>
-      <LTBody items="jo">
-        {students.map(student => (
-          <LTRow>
-            <LTData sortingValue={student.name} sortingType="string">
-              <p>{student.name}</p>
-            </LTData>
-            <LTData sortingValue={student.total_time} sortingType="number">
-              <p>
-                {student.total_time / 3600}h {(student.total_time / 60) % 60}m
-              </p>
-            </LTData>
-            <LTData>
-              <p>{student.learning_proportion}</p>
-            </LTData>
-          </LTRow>
-        ))}
-      </LTBody>
-    </ListTable>
-  )
-  // console.log(listTable)
+  const headItems = [
+    {
+      width: 25,
+      isSortable: true,
+      content: <p>NAME</p>
+    },
+    {
+      width: 25,
+      isSortable: true,
+      content: <p>TIME SPENT</p>
+    },
+    {
+      width: 50,
+      isSortable: false,
+      content: <p>ACTIVITY</p>
+    }
+  ]
+
+  const bodyItems = students.map(student => ({
+    data: [
+      {
+        sortingValue: student.name,
+        sortingType: 'string',
+        content: <p>{student.name}</p>
+      },
+      {
+        sortingValue: student.total_time,
+        sortingType: 'number',
+        content: (
+          <p>
+            {student.total_time / 3600}h {(student.total_time / 60) % 60}m
+          </p>
+        )
+      },
+      {
+        content: <p>{student.learning_proportion}</p>
+      }
+    ],
+    renderComponent: props => <Link to="bla" {...props} />
+  }))
   return (
     <div className="page-classroom">
       Class Name: {cohortName} Class code: {cohortCode}
-      {listTable}
+      <ListTable headItems={headItems} bodyItems={bodyItems} />
     </div>
   )
 }
@@ -103,7 +81,6 @@ const Classroom = ({ classId }) => {
 
   const test = useContext(ClassContext)
   const cohort = test.activeClass
-  console.log('cohort', cohort)
 
   useEffect(() => {
     getGeneralCohortInfo(classId).then(({ data }) => {
