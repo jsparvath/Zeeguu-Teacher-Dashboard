@@ -19,8 +19,6 @@ export const ListTable = ({ headItems, bodyItems, tableRowComponent }) => {
     let sortedItems = [...bodyItems]
     if (sortingInfo.sortingIndex || sortingInfo.sortingIndex === 0) {
       sortedItems = sortedItems.sort(({ data: a }, { data: b }) => {
-        console.log(a)
-        // console.log(b)
         const sortingValueA = a[sortingInfo.sortingIndex].sortingValue
         const sortingValueB = b[sortingInfo.sortingIndex].sortingValue
         const sortingType = b[sortingInfo.sortingIndex].sortingType
@@ -36,8 +34,6 @@ export const ListTable = ({ headItems, bodyItems, tableRowComponent }) => {
         sortedItems = sortedItems.reverse()
       }
     }
-    // console.log(sortedItems)
-    // console.log('sortedItems')
     setSortedBodyItems(sortedItems)
   }, [sortingInfo])
 
@@ -68,7 +64,6 @@ export const ListTable = ({ headItems, bodyItems, tableRowComponent }) => {
         ))}
       </LTHead>
       <ul>
-        {/* {console.log(sortedBodyItems)} */}
         {sortedBodyItems.map((row, index) => {
           return (
             <LTRow component={row.renderComponent} key={index}>

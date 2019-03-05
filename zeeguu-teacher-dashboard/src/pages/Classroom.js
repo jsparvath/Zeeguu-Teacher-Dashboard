@@ -26,7 +26,7 @@ function transformStudents(students) {
   )
   return transformedStudents
 }
-const ClassroomTemplate = ({ cohortName, cohortCode, students }) => {
+const ClassroomTemplate = ({ cohort, students }) => {
   const headItems = [
     {
       width: 25,
@@ -65,11 +65,11 @@ const ClassroomTemplate = ({ cohortName, cohortCode, students }) => {
         content: <p>{student.learning_proportion}</p>
       }
     ],
-    renderComponent: props => <Link to="bla" {...props} />
+    renderComponent: props => <Link to={'student/' + student.id} {...props} />
   }))
   return (
     <div className="page-classroom">
-      Class Name: {cohortName} Class code: {cohortCode}
+      Class Name: {cohort.name} Class code: {cohort.code}
       <ListTable headItems={headItems} bodyItems={bodyItems} />
     </div>
   )
@@ -119,11 +119,7 @@ const Classroom = ({ classId }) => {
           </p>
         </>
       ) : (
-        <ClassroomTemplate
-          students={students}
-          cohortName="Spanish 2019"
-          cohortCode="josn"
-        />
+        <ClassroomTemplate students={students} cohort={cohortInfo} />
       )}
     </div>
   )
