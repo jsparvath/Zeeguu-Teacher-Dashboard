@@ -1,12 +1,12 @@
-import React, { useEffect, useContext, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './classroom.scss'
 import { getGeneralCohortInfo, getStudents } from '../api/api_endpoints'
 import { Link } from '@reach/router'
-import ClassContext from '../ClassContext'
 import { ListTable } from '../components/ui/ListTable'
 import { addTotalAndNormalizedTime, getProportion } from '../utilities/helpers'
 import { Dialog, DialogContent, Button as Buttoooon } from '@material-ui/core'
-import EditClassFrom from '../components/EditClassForm'
+
+import ClassForm from '../components/ClassForm'
 
 function transformStudents(students) {
   let maxActivity = 0
@@ -102,7 +102,12 @@ const Classroom = ({ classId }) => {
         </Buttoooon>
         <Dialog open={isOpen} onClose={() => setIsOpen(false)}>
           <DialogContent>
-            <EditClassFrom
+            {/* <EditClassFrom
+              cohort={cohortInfo}
+              closemodal={() => setIsOpen(false)}
+						/> */}
+            <ClassForm
+              primaryButtonText="Update Class"
               cohort={cohortInfo}
               closemodal={() => setIsOpen(false)}
             />
