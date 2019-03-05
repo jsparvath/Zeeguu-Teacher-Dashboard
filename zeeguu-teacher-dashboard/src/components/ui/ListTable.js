@@ -1,90 +1,81 @@
 import React, { useState, useEffect } from 'react'
 import clsx from 'clsx'
 
-function compareString(a, b) {}
+import './listTable.scss'
+
+// function compareString(a, b) {}
 
 // We are not using the html "table" element because each row is a link.
 // implementing that functionality with table is very complex, and also bad for accessibility reasons.
 // Therefore an unordered list is used
-export const ListTable = ({ children }) => {
+export const ListTable = ({ headItems, bodyItems, tableRowComponent }) => {
   const [sortingInfo, setSortingInfo] = useState({
     sortingIndex: '',
     reverse: false
   })
-
-  const transformedChildren = React.Children.map(children, child => {
-    if (child.type.name === 'LTHead') {
-      return React.cloneElement(child, {
-        children: child.props.children.map((headItem, index) => {
-          let transformedItem = headItem.props.isSortable
-            ? React.cloneElement(headItem, {
-                onClick: () => {
-                  const isReverse =
-                    sortingInfo.sortingIndex == index
-                      ? !sortingInfo.reverse
-                      : false
-                  setSortingInfo({
-                    sortingIndex: index,
-                    reverse: isReverse
-                  })
-                }
-              })
-            : headItem
-          return transformedItem
-        })
-      })
-    } else {
-      return child
-    }
-  })
-
-  // const _headItems = children
-  //   .find(child => child.type.name === 'LTHead')
-  //   .props.children.map((headItem, index) => {
-  //     let transformedItem = headItem.props.isSortable
-  //       ? React.cloneElement(headItem, {
-  //           onClick: () => alert('bla')
-  //         })
-  //       : headItem
-  //     // console.log(index)
-  //     // console.log(headItem)
-  //     return transformedItem
-  //   })
-
-  const _bodyItems = children.find(child => child.type.name === 'LTBody').props
-    .children
-  // console.log(_headItems)
-  // console.log(_bodyItems)
-  // const [headItems, setHeadItems] = useState(_headItems)
-  const [bodyItems, setBodyItems] = useState(_bodyItems)
+  const [sortedBodyItems, setSortedBodyItems] = useState(bodyItems)
 
   useEffect(() => {
-    console.log(sortingInfo)
+    let sortedItems = [...bodyItems]
     if (sortingInfo.sortingIndex || sortingInfo.sortingIndex === 0) {
-      const sortedItems = [...bodyItems].sort((a, b) => {
-        const sortingValueA =
-          a.props.children[sortingInfo.sortingIndex].props.sortingValue
-        const sortingValueB =
-          b.props.children[sortingInfo.sortingIndex].props.sortingValue
-        const sortingType =
-          b.props.children[sortingInfo.sortingIndex].props.sortinType
+      sortedItems = sortedItems.sort(({ data: a }, { data: b }) => {
+        const sortingValueA = a[sortingInfo.sortingIndex].sortingValue
+        const sortingValueB = b[sortingInfo.sortingIndex].sortingValue
+        const sortingType = b[sortingInfo.sortingIndex].sortingType
         if (sortingType === 'string') {
-          return sortingValueA.toLowerCase().localeCompare(b.toLowerCase())
+          return sortingValueA
+            .toLowerCase()
+            .localeCompare(sortingValueB.toLowerCase())
         } else {
           return sortingValueA - sortingValueB
         }
       })
       if (sortingInfo.reverse) {
-        console.log(sortedItems.reverse())
-      } else {
-        console.log(sortedItems)
+        sortedItems = sortedItems.reverse()
       }
-      // const sortingFunction =
-      // const sorted = bodyItems.sort((a,b) =>  )
     }
+    setSortedBodyItems(sortedItems)
   }, [sortingInfo])
 
-  return <div>{transformedChildren}</div>
+  return (
+    <div>
+      <LTHead>
+        {headItems.map((item, index) => (
+          <LTHeadItem
+            isSortable={item.isSortable}
+            key={index}
+            onClick={
+              item.isSortable
+                ? () => {
+                    const isReverse =
+                      sortingInfo.sortingIndex == index
+                        ? !sortingInfo.reverse
+                        : false
+                    setSortingInfo({
+                      sortingIndex: index,
+                      reverse: isReverse
+                    })
+                  }
+                : null
+            }
+          >
+            {item.content}
+          </LTHeadItem>
+        ))}
+      </LTHead>
+      <ul>
+        {sortedBodyItems.map((row, index) => {
+          return (
+            <LTRow component={row.renderComponent} key={index}>
+              {row.data.map((item, index) => {
+                return <LTData key={index}>{item.content}</LTData>
+              })}
+            </LTRow>
+          )
+        })}
+      </ul>
+    </div>
+  )
 }
 
 export const LTHead = ({ children }) => {
@@ -95,24 +86,28 @@ export const LTHeadItem = ({
   isSortable = false,
   onClick = null
 }) => (
-  <p
+  <div
     className={clsx('ztd-student-table--cell', {
       'ztd-student-table--is-sortable': isSortable
     })}
     onClick={onClick}
   >
     {children}
-  </p>
+  </div>
 )
 export const LTBody = ({ children }) => {
   return <ul>{children}</ul>
 }
-export const LTRow = ({ children }) => {
+
+export const LTRow = ({
+  children,
+  component: Component = props => <a {...props} />
+}) => {
   return (
     <li className="ztd-student-table--item">
-      <a className="ztd-student-table--link" href="#">
+      <Component className="ztd-student-table--link" href="#">
         {children}
-      </a>
+      </Component>
     </li>
   )
 }
