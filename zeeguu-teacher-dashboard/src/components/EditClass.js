@@ -102,7 +102,6 @@ export const EditClass = ({ closemodal }) => {
         <Button
           className="ztd-btn--danger"
           onClick={() => {
-            console.log('deleting cohort:', cohort)
             deleteCohort(cohort.id).then(() => navigate('/'))
           }}
         >

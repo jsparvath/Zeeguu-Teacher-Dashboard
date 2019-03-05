@@ -66,7 +66,6 @@ const Home = () => {
   // can be used to add a newly created cohort to the list without refreshing
   // might not be smart though - needs testing
   // function addCohort(cohort) {
-  //   console.log('adding', cohort)
   //   setCohortsInfo([...cohorts, cohort])
   // }
 
