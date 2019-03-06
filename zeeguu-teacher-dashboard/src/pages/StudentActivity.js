@@ -1,7 +1,44 @@
 import React from 'react'
+import {
+  ExpansionPanel,
+  ExpansionPanelSummary,
+  ExpansionPanelDetails
+} from '@material-ui/core'
+import { MdExpandMore } from 'react-icons/md/'
 
+import './studentActivity.scss'
 const StudentActivity = () => {
-  return <div>I am the student activity page</div>
+  return (
+    <div>
+      <ExpansionPanel>
+        <ExpansionPanelSummary expandIcon={<MdExpandMore />}>
+          <h2 className="student-activity-item-heading">
+            This is my lucky friend
+          </h2>
+          <p>another friend</p>
+        </ExpansionPanelSummary>
+        <ExpansionPanelDetails>yoyoyo</ExpansionPanelDetails>
+      </ExpansionPanel>
+      <ExpansionPanel>
+        <ExpansionPanelSummary expandIcon={<MdExpandMore />}>
+          This is my lucky friend
+        </ExpansionPanelSummary>
+        <ExpansionPanelDetails>yoyoyo</ExpansionPanelDetails>
+      </ExpansionPanel>
+      <ExpansionPanel>
+        <ExpansionPanelSummary expandIcon={<MdExpandMore />}>
+          This is my lucky friend
+        </ExpansionPanelSummary>
+        <ExpansionPanelDetails>yoyoyo</ExpansionPanelDetails>
+      </ExpansionPanel>
+      <ExpansionPanel>
+        <ExpansionPanelSummary expandIcon={<MdExpandMore />}>
+          This is my lucky friend
+        </ExpansionPanelSummary>
+        <ExpansionPanelDetails>yoyoyo</ExpansionPanelDetails>
+      </ExpansionPanel>
+    </div>
+  )
 }
 
 export default StudentActivity

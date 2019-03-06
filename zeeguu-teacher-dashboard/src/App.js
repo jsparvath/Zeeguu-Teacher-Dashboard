@@ -19,7 +19,7 @@ const App = () => {
         <Home path="/" />
         {/* <LoginPage path="/login" /> */}
         <Classroom path="classroom/:classId" />
-        <StudentActivity path="studentactivity" />
+        <StudentActivity path="student/:studentId" />
       </Router>
     </div>
   )

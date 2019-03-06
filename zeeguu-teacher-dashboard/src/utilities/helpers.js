@@ -54,8 +54,10 @@ export function transformStudents(students) {
       total_time
     }
   })
-  transformedStudents = transformedStudents.map(student =>
-    addTotalAndNormalizedTime(student, maxActivity)
-  )
+  if (!maxActivity === 0) {
+    transformedStudents = transformedStudents.map(student =>
+      addTotalAndNormalizedTime(student, maxActivity)
+    )
+  }
   return transformedStudents
 }

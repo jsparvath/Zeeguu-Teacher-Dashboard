@@ -38,7 +38,8 @@ const ClassroomTemplate = ({ cohort, students }) => {
         sortingType: 'number',
         content: (
           <p>
-            {student.total_time / 3600}h {(student.total_time / 60) % 60}m
+            {Math.floor(student.total_time / 3600)}h{' '}
+            {Math.ceil((student.total_time / 60) % 60)}m
           </p>
         )
       },
