@@ -2,30 +2,11 @@ import React, { useEffect, useState } from 'react'
 import './classroom.scss'
 import { getGeneralCohortInfo, getStudents } from '../api/api_endpoints'
 import { Link } from '@reach/router'
-import { ListTable } from '../components/ui/ListTable'
-import { addTotalAndNormalizedTime, getProportion } from '../utilities/helpers'
+import ListTable from '../components/ui/ListTable'
 import { Dialog, DialogContent, Button as Buttoooon } from '@material-ui/core'
 
 import ClassForm from '../components/ClassForm'
 
-function transformStudents(students) {
-  let maxActivity = 0
-  let transformedStudents = students.map(student => {
-    const { reading_time, exercises_done } = student
-    const learning_proportion = getProportion(reading_time, exercises_done)
-    const total_time = reading_time + exercises_done
-    maxActivity = maxActivity > total_time ? maxActivity : total_time
-    return {
-      ...student,
-      learning_proportion,
-      total_time
-    }
-  })
-  transformedStudents = transformedStudents.map(student =>
-    addTotalAndNormalizedTime(student, maxActivity)
-  )
-  return transformedStudents
-}
 const ClassroomTemplate = ({ cohort, students }) => {
   const headItems = [
     {
@@ -83,8 +64,7 @@ const Classroom = ({ classId }) => {
     getGeneralCohortInfo(classId).then(({ data }) => {
       setCohortInfo(data)
     })
-    getStudents(classId, 9).then(({ data }) => {
-      const students = transformStudents(data)
+    getStudents(classId, 9).then(students => {
       setStudents(students)
     })
   }, [])

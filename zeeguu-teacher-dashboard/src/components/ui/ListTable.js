@@ -8,7 +8,7 @@ import './listTable.scss'
 // We are not using the html "table" element because each row is a link.
 // implementing that functionality with table is very complex, and also bad for accessibility reasons.
 // Therefore an unordered list is used
-export const ListTable = ({ headItems, bodyItems, tableRowComponent }) => {
+const ListTable = ({ headItems, bodyItems, tableRowComponent }) => {
   const [sortingInfo, setSortingInfo] = useState({
     sortingIndex: '',
     reverse: false
@@ -115,46 +115,4 @@ export const LTData = ({ children }) => {
   return <div className="ztd-student-table--cell">{children}</div>
 }
 
-//  <ListTable>
-//   <LTHead headItems={[{name: "NAME", isSortable: true}, {name: "TIME SPENT", isSortable: true} ]}/>
-//   <LTBody bodyItems={[{name: "jonathan", timeSpent: "0", activity: "0"}]}/>
-// </ListTable>
-
-{
-  /* <ListTable>
-  <LTHead>
-    <LTHeadItem isSortable>NAME</LTHeadItem>
-    <LTHeadItem isSortable>TIME SPENT</LTHeadItem>
-  </LTHead>
-  <LTBody>
-    <LTItem>
-      <LTItemData>Jonathan</LTItemData>
-      <LTItemData>0h 0m</LTItemData>
-      <LTItemData>11</LTItemData>
-    </LTItem>
-  </LTBody>
-</ListTable> */
-}
-
-// <div className="ztd-student-table--header">
-//   <p>NAME</p>
-//   <p>TIME SPENT</p>
-//   <p>ACTIVITY</p>
-// </div>
-// <ul>
-//   {students.map(student => {
-//     return (
-//       <li className="ztd-student-table--item" key={student.id}>
-//         <a className="ztd-student-table--link" href="#">
-//           <p>{student.name}</p>
-//           <p>
-//             {student.total_time / 3600}h {(student.total_time / 60) % 60}m
-//           </p>
-//           {/* Vj {{ ((student.exercises_done + student.reading_time)/3600)|int }} h
-//                           {{ (((student.exercises_done + student.reading_time)/60)%60)|int }} m */}
-//           <p>{student.learning_proportion}</p>
-//         </a>
-//       </li>
-//     )
-//   })}
-// </ul>
+export default ListTable

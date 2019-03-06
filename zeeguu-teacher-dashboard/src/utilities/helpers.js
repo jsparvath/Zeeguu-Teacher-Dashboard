@@ -40,3 +40,22 @@ export function addTotalAndNormalizedTime(student, maxActivity) {
     return student
   }
 }
+
+export function transformStudents(students) {
+  let maxActivity = 0
+  let transformedStudents = students.map(student => {
+    const { reading_time, exercises_done } = student
+    const learning_proportion = getProportion(reading_time, exercises_done)
+    const total_time = reading_time + exercises_done
+    maxActivity = maxActivity > total_time ? maxActivity : total_time
+    return {
+      ...student,
+      learning_proportion,
+      total_time
+    }
+  })
+  transformedStudents = transformedStudents.map(student =>
+    addTotalAndNormalizedTime(student, maxActivity)
+  )
+  return transformedStudents
+}

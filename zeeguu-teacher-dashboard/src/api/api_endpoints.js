@@ -1,5 +1,6 @@
 import axios from 'axios'
 import universalCookies from 'universal-cookie'
+import { transformStudents } from '../utilities/helpers'
 
 const BASE_URL =
   process.env.NODE_ENV === 'production'
@@ -11,6 +12,14 @@ export function getCohortsInfo() {
   return _apiGet(GET_COHORTS_INFO)
 }
 
+export async function getUsersByTeacher(duration) {
+  const GET_USERS_BY_TEACHER = BASE_URL + '/users_by_teacher/' + duration
+  const result = _apiGet(GET_USERS_BY_TEACHER).then(({ data }) =>
+    transformStudents(data)
+  )
+  return result
+}
+
 export function getGeneralCohortInfo(classId) {
   const GET_GENERAL_COHORTS_INFO = BASE_URL + '/cohort_info/' + classId
   return _apiGet(GET_GENERAL_COHORTS_INFO)
@@ -19,7 +28,10 @@ export function getGeneralCohortInfo(classId) {
 export function getStudents(classId, duration) {
   const GET_STUDENTS =
     BASE_URL + '/users_from_cohort/' + classId + '/' + duration
-  return _apiGet(GET_STUDENTS)
+  const result = _apiGet(GET_STUDENTS).then(({ data }) =>
+    transformStudents(data)
+  )
+  return result
 }
 
 export function createCohort(data) {

@@ -3,6 +3,12 @@
 .page-home {
   // background-color: blue;
 }
+
+.page-home-tab-bar {
+  // width: 30px;
+  // display: inline;
+  width: fit-content;
+}
 .page-home-content {
   max-width: $content-width-max;
   margin: 0 auto;
