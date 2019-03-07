@@ -1,13 +1,20 @@
-import React from 'react'
 import {
   ExpansionPanel,
-  ExpansionPanelSummary,
-  ExpansionPanelDetails
+  ExpansionPanelDetails,
+  ExpansionPanelSummary
 } from '@material-ui/core'
+import React, { useEffect, useState } from 'react'
 import { MdExpandMore } from 'react-icons/md/'
-
+import { loadUserData } from '../api/apiEndpoints'
 import './studentPage.scss'
-const StudentActivity = () => {
+
+const StudentActivity = ({ studentId }) => {
+  const [studentData, setStudentData] = useState([])
+  useEffect(() => {
+    loadUserData(studentId, 10).then(result => {
+      // console.log(result)
+    })
+  }, [])
   return (
     <div>
       <ExpansionPanel>

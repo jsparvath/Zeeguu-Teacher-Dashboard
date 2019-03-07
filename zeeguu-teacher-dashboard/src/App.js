@@ -1,12 +1,10 @@
-import React, { useState } from 'react'
 import { Router } from '@reach/router'
-
-import Home from './pages/Home'
-import Classroom from './pages/Classroom'
-import StudentPage from './pages/StudentPage'
-import Nav from './components/Nav'
-
+import React from 'react'
 import './App.scss'
+import Nav from './components/Nav'
+import Classroom from './pages/Classroom'
+import Home from './pages/Home'
+import StudentPage from './pages/StudentPage'
 
 const App = () => {
   return (

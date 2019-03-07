@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react'
-import './classroom.scss'
-import { getGeneralCohortInfo, getStudents } from '../api/api_endpoints'
+import { Button as Buttoooon, Dialog, DialogContent } from '@material-ui/core'
 import { Link } from '@reach/router'
-import ListTable from '../components/ui/ListTable'
-import { Dialog, DialogContent, Button as Buttoooon } from '@material-ui/core'
-
+import React, { useEffect, useState } from 'react'
+import { getGeneralCohortInfo, getStudents } from '../api/apiEndpoints'
 import ClassForm from '../components/ClassForm'
+import ListTable from '../components/ui/ListTable'
+import './classroom.scss'
 
 const ClassroomTemplate = ({ cohort, students }) => {
   const headItems = [

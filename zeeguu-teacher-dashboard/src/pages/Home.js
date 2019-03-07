@@ -1,14 +1,11 @@
-import React, { useEffect, useState } from 'react'
-
+import Tab from '@material-ui/core/Tab'
+import Tabs from '@material-ui/core/Tabs'
 import { Link } from '@reach/router'
-import { getCohortsInfo, getUsersByTeacher } from '../api/api_endpoints'
-
-import './Home.scss'
-
+import React, { useEffect, useState } from 'react'
+import { getCohortsInfo, getUsersByTeacher } from '../api/apiEndpoints'
 import CohortsList from '../components/CohortsList'
 import ListTable from '../components/ui/ListTable'
-import Tabs from '@material-ui/core/Tabs'
-import Tab from '@material-ui/core/Tab'
+import './Home.scss'
 
 const headItems = [
   {

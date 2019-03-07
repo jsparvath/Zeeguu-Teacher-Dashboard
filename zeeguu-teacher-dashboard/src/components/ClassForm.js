@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 import { navigate } from '@reach/router'
-import { createCohort } from '../api/api_endpoints'
-import { updateCohort } from '../api/api_endpoints'
-import { deleteCohort } from '../api/api_endpoints'
+import { createCohort } from '../api/apiEndpoints'
+import { updateCohort } from '../api/apiEndpoints'
+import { deleteCohort } from '../api/apiEndpoints'
 
 import { SpringSpinner } from 'react-epic-spinners'
 import { languageMap } from '../utilities/helpers'
@@ -78,14 +78,12 @@ const ClassForm = ({ primaryButtonText, cohort, closemodal }) => {
     if (cohort) {
       updateCohort(form, cohort.id)
         .then(res => {
-          console.log('RESULT', res)
           setTimeout(() => closemodal(), 2000)
         })
         .catch(err => setErrorState(true))
     } else {
       createCohort(form)
         .then(res => {
-          console.log('RESULT', res)
           setTimeout(() => closemodal(), 2000)
         })
         .catch(err => setErrorState(true))
