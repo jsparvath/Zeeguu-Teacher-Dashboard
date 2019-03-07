@@ -1,7 +1,7 @@
 import { Button as Buttoooon, Dialog, DialogContent } from '@material-ui/core'
 import { Link } from '@reach/router'
 import React, { useEffect, useState } from 'react'
-import { getGeneralCohortInfo, getStudents } from '../api/apiEndpoints'
+import { getGeneralCohortInfo, getStudents } from '../api/apiCohort'
 import ClassForm from '../components/ClassForm'
 import ListTable from '../components/ui/ListTable'
 import './classroom.scss'
@@ -46,7 +46,7 @@ const ClassroomTemplate = ({ cohort, students }) => {
         content: <p>{student.learning_proportion}</p>
       }
     ],
-    renderComponent: props => <Link to={'student/' + student.id} {...props} />
+    renderComponent: props => <Link to={'/student/' + student.id} {...props} />
   }))
   return (
     <div className="page-classroom">

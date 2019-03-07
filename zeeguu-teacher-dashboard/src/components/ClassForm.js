@@ -1,23 +1,19 @@
-import React, { useState } from 'react'
-import ReactDOM from 'react-dom'
-import { navigate } from '@reach/router'
-import { createCohort } from '../api/apiEndpoints'
-import { updateCohort } from '../api/apiEndpoints'
-import { deleteCohort } from '../api/apiEndpoints'
-
-import { SpringSpinner } from 'react-epic-spinners'
-import { languageMap } from '../utilities/helpers'
-
 import {
   Button,
-  TextField,
+  FormControl,
   InputLabel,
   MenuItem,
-  FormControl,
   Select,
   Snackbar,
-  SnackbarContent
+  SnackbarContent,
+  TextField
 } from '@material-ui/core'
+import { navigate } from '@reach/router'
+import React, { useState } from 'react'
+import ReactDOM from 'react-dom'
+import { SpringSpinner } from 'react-epic-spinners'
+import { createCohort, deleteCohort, updateCohort } from '../api/apiCohort'
+import { languageMap } from '../utilities/helpers'
 
 const ClassForm = ({ primaryButtonText, cohort, closemodal }) => {
   const [errorState, setErrorState] = useState(false)

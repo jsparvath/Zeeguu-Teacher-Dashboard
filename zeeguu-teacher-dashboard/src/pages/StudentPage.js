@@ -5,7 +5,7 @@ import {
 } from '@material-ui/core'
 import React, { useEffect, useState } from 'react'
 import { MdExpandMore } from 'react-icons/md/'
-import { loadUserData } from '../api/apiEndpoints'
+import { loadUserData } from '../api/apiUser'
 import './studentPage.scss'
 
 const StudentActivity = ({ studentId }) => {
