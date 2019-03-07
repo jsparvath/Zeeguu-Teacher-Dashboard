@@ -33,6 +33,7 @@ export function getStudents(classId, duration) {
   )
   return result
 }
+// export function loadUserData(userId, duration)
 
 export function createCohort(data) {
   const CREATE_COHORT = BASE_URL + '/create_own_cohort'

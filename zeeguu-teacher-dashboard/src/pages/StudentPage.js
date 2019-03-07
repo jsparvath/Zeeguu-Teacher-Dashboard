@@ -6,7 +6,7 @@ import {
 } from '@material-ui/core'
 import { MdExpandMore } from 'react-icons/md/'
 
-import './studentActivity.scss'
+import './studentPage.scss'
 const StudentActivity = () => {
   return (
     <div>
