@@ -44,7 +44,7 @@ const StudentActivity = ({ classId, studentId }) => {
                     {article.title}
                   </h2>
 
-                  <p>another friend</p>
+                  {/* <p>another friend</p> */}
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
                   {article.sentence_list.map(sentence => (
