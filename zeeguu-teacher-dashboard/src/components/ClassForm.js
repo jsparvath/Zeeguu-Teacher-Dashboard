@@ -120,11 +120,11 @@ const ClassForm = ({ primaryButtonText, cohort, closemodal }) => {
           fullWidth
           type="number"
           required
-          disabled={cohort}
+          disabled={!!cohort}
         />
         <FormControl
           fullWidth
-          disabled={cohort}
+          disabled={!!cohort}
           required
           style={{ minWidth: 120 }}
         >
