@@ -3,6 +3,8 @@ import { Dialog, DialogContent, Button } from '@material-ui/core'
 import { MdPeople, MdArrowForward, MdAddCircle } from 'react-icons/md/'
 import { Link } from '@reach/router'
 
+import { createCohort } from '../api/apiCohort'
+
 import ClassForm from './ClassForm'
 import './cohortsList.scss'
 
@@ -35,6 +37,21 @@ const CohortItem = ({ cohort }) => {
 
 const CohortsList = ({ cohorts }) => {
   const [isOpen, setIsOpen] = useState(false)
+  const [isError, setIsError] = useState(false)
+
+  const addClass = form => {
+    setIsError(false)
+    createCohort(form)
+      .then(result => {
+        setTimeout(() => {
+          setIsOpen(false)
+          console.log('creating')
+          // setIsError(false)
+          // todo: refresh the UI
+        }, 2000)
+      })
+      .catch(err => setIsError(true))
+  }
 
   return (
     <div className="cohorts-list">
@@ -53,7 +70,8 @@ const CohortsList = ({ cohorts }) => {
         <DialogContent>
           <ClassForm
             primaryButtonText="Create Class"
-            closemodal={() => setIsOpen(false)}
+            onSubmit={addClass}
+            isError={isError}
           />
         </DialogContent>
       </Dialog>

@@ -1,7 +1,11 @@
 import { Button as Buttoooon, Dialog, DialogContent } from '@material-ui/core'
 import { Link } from '@reach/router'
 import React, { useEffect, useState } from 'react'
-import { getGeneralCohortInfo, getStudents } from '../api/apiCohort'
+import {
+  getGeneralCohortInfo,
+  getStudents,
+  updateCohort
+} from '../api/apiCohort'
 import ClassForm from '../components/ClassForm'
 import ListTable from '../components/ui/ListTable'
 import './classroom.scss'
@@ -56,9 +60,10 @@ const ClassroomTemplate = ({ cohort, students }) => {
   )
 }
 const Classroom = ({ classId }) => {
-  const [cohortInfo, setCohortInfo] = useState([])
+  const [cohortInfo, setCohortInfo] = useState({})
   const [students, setStudents] = useState([])
   const [isOpen, setIsOpen] = useState(false)
+  const [isError, setIsError] = useState(false)
 
   useEffect(() => {
     getGeneralCohortInfo(classId).then(({ data }) => {
@@ -68,6 +73,22 @@ const Classroom = ({ classId }) => {
       setStudents(students)
     })
   }, [])
+
+  const updateClass = form => {
+    console.log('in updateclass')
+    setIsError(false)
+    updateCohort(form, classId)
+      .then(result => {
+        setTimeout(() => {
+          setIsOpen(false)
+          console.log('updating')
+          getGeneralCohortInfo(classId).then(({ data }) => {
+            setCohortInfo(data)
+          })
+        }, 2000)
+      })
+      .catch(err => setIsError(true))
+  }
 
   return (
     <div>
@@ -89,7 +110,9 @@ const Classroom = ({ classId }) => {
             <ClassForm
               primaryButtonText="Update Class"
               cohort={cohortInfo}
-              closemodal={() => setIsOpen(false)}
+              onSubmit={updateClass}
+              isError={isError}
+              // closemodal={() => setIsOpen(false)}
             />
           </DialogContent>
         </Dialog>

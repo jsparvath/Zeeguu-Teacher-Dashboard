@@ -15,7 +15,7 @@ import { SpringSpinner } from 'react-epic-spinners'
 import { createCohort, deleteCohort, updateCohort } from '../api/apiCohort'
 import { languageMap } from '../utilities/helpers'
 
-const ClassForm = ({ primaryButtonText, cohort, closemodal }) => {
+const ClassForm = ({ primaryButtonText, cohort, isError, onSubmit }) => {
   const [errorState, setErrorState] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const inputLabelRef = React.useRef(null)
@@ -70,20 +70,22 @@ const ClassForm = ({ primaryButtonText, cohort, closemodal }) => {
     setIsLoading(true)
 
     const form = setupForm()
+    onSubmit(form)
+    // setTimeout(() => onSubmit(form), 2000)
 
-    if (cohort) {
-      updateCohort(form, cohort.id)
-        .then(res => {
-          setTimeout(() => closemodal(), 2000)
-        })
-        .catch(err => setErrorState(true))
-    } else {
-      createCohort(form)
-        .then(res => {
-          setTimeout(() => closemodal(), 2000)
-        })
-        .catch(err => setErrorState(true))
-    }
+    // if (cohort) {
+    //   updateCohort(form, cohort.id)
+    //     .then(res => {
+    //       setTimeout(() => doneUpdating(), 2000)
+    //     })
+    //     .catch(err => setErrorState(true))
+    // } else {
+    //   createCohort(form)
+    //     .then(res => {
+    //       setTimeout(() => closemodal(), 2000)
+    //     })
+    //     .catch(err => setErrorState(true))
+    // }
     event.preventDefault()
   }
 
@@ -148,7 +150,7 @@ const ClassForm = ({ primaryButtonText, cohort, closemodal }) => {
             <MenuItem value={'zh-CN'}>Chinese</MenuItem>
           </Select>
         </FormControl>
-        {errorState && <Error setLoading={setIsLoading} />}
+        {isError && <Error setLoading={setIsLoading} />}
         <Button
           style={{ marginTop: 10 }}
           type="submit"
