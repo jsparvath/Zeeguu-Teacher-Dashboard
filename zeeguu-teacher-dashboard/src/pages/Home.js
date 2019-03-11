@@ -94,12 +94,15 @@ const Home = () => {
           <Tab label="STUDENTS" />
         </Tabs>
         {activeTab === 0 && <CohortsList cohorts={cohorts} />}
-        {activeTab === 1 && (
-          <ListTable
-            headItems={headItems}
-            bodyItems={getStudentBodyItems(allStudents)}
-          />
-        )}
+        {activeTab === 1 &&
+          (allStudents.length ? (
+            <ListTable
+              headItems={headItems}
+              bodyItems={getStudentBodyItems(allStudents)}
+            />
+          ) : (
+            <p>No students</p>
+          ))}
         {/* {cohorts.length ? <HomeTemplate cohorts={cohorts} /> : <p>Loading</p>} */}
       </div>
     </div>
