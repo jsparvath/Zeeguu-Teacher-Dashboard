@@ -1,7 +1,8 @@
 import Tab from '@material-ui/core/Tab'
 import Tabs from '@material-ui/core/Tabs'
 import { Link } from '@reach/router'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
+import TimePeriodContext from '../context/TimePeriodContext'
 import { getCohortsInfo, getUsersByTeacher } from '../api/apiCohort'
 import CohortsList from '../components/CohortsList'
 import ListTable from '../components/ui/ListTable'
@@ -55,12 +56,14 @@ const Home = () => {
   const [cohorts, setCohortsInfo] = useState([])
   const [activeTab, setActiveTag] = useState(0)
   const [allStudents, setAllStudents] = useState([])
+  const { timePeriod } = useContext(TimePeriodContext)
 
   useEffect(() => {
-    getUsersByTeacher(199).then(students => {
+    console.log('CURRENT TIME PERIOD IN HOME', timePeriod)
+    getUsersByTeacher(timePeriod).then(students => {
       setAllStudents(students)
     })
-  }, [])
+  }, [timePeriod])
 
   useEffect(() => {
     getCohortsInfo().then(({ data }) => {
