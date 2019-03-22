@@ -7,6 +7,7 @@ import { getCohortsInfo, getUsersByTeacher } from '../api/apiCohort'
 import CohortsList from '../components/CohortsList'
 import ListTable from '../components/ui/ListTable'
 import './Home.scss'
+import Teacher from '../assets/images/teacher.svg'
 
 const headItems = [
   {
@@ -101,12 +102,25 @@ const Home = () => {
               bodyItems={getStudentBodyItems(allStudents)}
             />
           ) : (
-            <p>No students</p>
+            <NoStudents />
           ))}
         {/* {cohorts.length ? <HomeTemplate cohorts={cohorts} /> : <p>Loading</p>} */}
       </div>
     </div>
   )
 }
+
+const NoStudents = () => (
+  <div>
+    <h4>You currently have no active students</h4>
+    <img
+      style={{
+        maxWidth: 500
+      }}
+      src={Teacher}
+      alt=""
+    />
+  </div>
+)
 
 export default Home
