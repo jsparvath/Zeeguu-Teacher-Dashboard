@@ -2,7 +2,6 @@ import { Router } from '@reach/router'
 import React, { useContext, useState } from 'react'
 import './App.scss'
 import Nav from './components/Nav'
-import TimePeriod from './components/TimePeriod'
 import Classroom from './pages/Classroom'
 import Home from './pages/Home'
 import StudentPage from './pages/StudentPage'
@@ -15,7 +14,6 @@ const App = () => {
     <TimePeriodContext.Provider value={{ timePeriod, setTimePeriod }}>
       <div className="App">
         <Nav />
-        <TimePeriod />
         <Router>
           <Home path="/" />
           {/* <LoginPage path="/login" /> */}

@@ -1,19 +1,17 @@
 import React, { useContext } from 'react'
 import { FormControl, MenuItem, Select } from '@material-ui/core'
 
+import './timeperiod.scss'
+
 import TimePeriodContext from '../context/TimePeriodContext'
 
 const TimePeriod = () => {
   const { timePeriod, setTimePeriod } = useContext(TimePeriodContext)
 
   return (
-    <div>
-      {console.log('global time', timePeriod)}
-      {/* <button onClick={() => setTimePeriod(timePeriod + 1)}>
-        Switch Language (Current: {timePeriod})
-			</button> */}
-      <FormControl required style={{ minWidth: 120 }}>
-        <p>Summary for the last ...</p>
+    <div className="timeperiod__component">
+      <p className="timeperiod__text">Summary for the last </p>
+      <FormControl required>
         <Select
           value={timePeriod}
           onChange={e => setTimePeriod(e.target.value)}
