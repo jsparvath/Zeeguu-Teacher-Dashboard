@@ -1,36 +1,33 @@
 import { apiGet } from './apiEndpoints'
 /**
- * Loads an invidiual users data.
+ * Loads an invidiual user's data.
  * Requires permission (the logged in teacher must be a teacher of the class containing user with user_id ).
  * @param {integer} userId used to find user.
  * @param {integer} duration
  * @returns {object} object containing (id, name, email, reading time, exercises done, last article)
  */
 export function loadUserInfo(userId, duration) {
+  console.log('loading user info')
   const studentInfo = apiGet(`/user_info/${userId}/${duration}`)
   return studentInfo
 }
 
-export function loadUserReadingSessions(userId, duration) {
-  const userReadingSessions = apiGet(
-    `/user_reading_sessions/${userId}/${duration}`
-  ).then(({ data }) => {
-    console.log('data')
-    console.log(data)
+export function loadUserSessions(userId, duration) {
+  let getBookmarks = apiGet(`/cohort_member_bookmarks/${userId}/${duration}`)
+  let getSessions = apiGet(
+    `/cohort_member_reading_sessions/${userId}/${duration}`
+  )
+  return Promise.all([getBookmarks, getSessions]).then(values => {
+    let [{ data: bookmarks }, { data: sessions }] = values
+    bookmarks = filterUserBookmarks(bookmarks)
+    bookmarks = transformUserBookmarks(bookmarks)
+    sessions = transformUserSession(sessions)
+    const userData = makeUserData(sessions, bookmarks)
+    console.log('blabla')
+    console.log(userData)
+    return userData
   })
 }
-
-export function loadUserData(userId, duration) {
-  let stats = apiGet(`/cohort_member_bookmarks/${userId}/${duration}`).then(
-    ({ data }) => {
-      const filteredData = filterUserBookmarks(data)
-      const sortedData = sortUserBookmarks(data)
-      return sortedData
-    }
-  )
-  return stats
-}
-
 /**
  * Takes an array of bookmarks and removed duplicate items
  * @param {Array} data
@@ -38,8 +35,8 @@ export function loadUserData(userId, duration) {
 function filterUserBookmarks(data) {
   let wordString = ' '
 
-  const result = data.map(day =>
-    day['bookmarks'].reduce(function(acc, bookmark) {
+  const result = data.map(day => {
+    const newBookmarks = day['bookmarks'].reduce(function(acc, bookmark) {
       if (wordString.includes(bookmark['from'])) {
         return acc
       } else {
@@ -48,17 +45,19 @@ function filterUserBookmarks(data) {
         return acc
       }
     }, [])
-  )
+    return { ...day, bookmarks: newBookmarks }
+  })
   return result
 }
 
-function sortUserBookmarks(data) {
+function transformUserBookmarks(data) {
   let masterList = []
   data.map(day => {
     let masterElement = {}
     masterElement.date = day.date
     masterElement['article_list'] = []
     masterList.push(masterElement)
+    console.log(day.date)
     day.bookmarks.forEach(bookmark => {
       let existsArticle = false
       masterElement['article_list'].forEach(article => {
@@ -95,4 +94,49 @@ function sortUserBookmarks(data) {
     })
   })
   return masterList
+}
+
+function transformUserSession(readingSessions) {
+  const result = readingSessions.map(day => {
+    const squashedSessions = {}
+    day.reading_sessions.forEach(readingSession => {
+      const id = readingSession.article_id
+      if (!squashedSessions[id]) {
+        squashedSessions[id] = readingSession
+      } else {
+        squashedSessions[id].duration += readingSession.duration
+      }
+    })
+    return {
+      ...day,
+      reading_sessions: Object.values(squashedSessions) //the values function takes the values of an object and turns them into an array
+    }
+  })
+  return result
+}
+
+function makeUserData(readingSessions, bookmarks) {
+  return readingSessions.map(readingSessionDay => {
+    let bookmarksForDay = bookmarks.find(bookmarkDay => {
+      return bookmarkDay.date === readingSessionDay.date
+    })
+    let sessionsWithBookmarks = readingSessionDay.reading_sessions.map(
+      readingSession => {
+        let bookmarksForSession
+        if (!bookmarksForDay) {
+          bookmarksForSession = { sentence_list: [] }
+        } else {
+          bookmarksForSession = bookmarksForDay.article_list.find(article => {
+            return article.title === readingSession.article_title
+          })
+        }
+        if (!bookmarksForSession) {
+          bookmarksForSession = { sentence_list: [] }
+        }
+        return { ...readingSession, bookmarks: bookmarksForSession }
+      }
+    )
+    console.log(readingSessionDay)
+    return { ...readingSessionDay, reading_sessions: sessionsWithBookmarks }
+  })
 }

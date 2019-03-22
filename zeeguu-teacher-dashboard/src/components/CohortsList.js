@@ -1,10 +1,8 @@
-import React, { useState } from 'react'
-import { Dialog, DialogContent, Button } from '@material-ui/core'
-import { MdPeople, MdArrowForward, MdAddCircle } from 'react-icons/md/'
+import { Button, Dialog, DialogContent } from '@material-ui/core'
 import { Link } from '@reach/router'
-
+import React, { useState } from 'react'
+import { MdAddCircle, MdArrowForward, MdPeople } from 'react-icons/md/'
 import { createCohort } from '../api/apiCohort'
-
 import ClassForm from './ClassForm'
 import './cohortsList.scss'
 
@@ -45,7 +43,6 @@ const CohortsList = ({ cohorts }) => {
       .then(result => {
         setTimeout(() => {
           setIsOpen(false)
-          console.log('creating')
           // setIsError(false)
           // todo: refresh the UI
         }, 2000)

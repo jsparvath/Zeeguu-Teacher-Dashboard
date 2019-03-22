@@ -9,6 +9,7 @@ import {
 import ClassForm from '../components/ClassForm'
 import ListTable from '../components/ui/ListTable'
 import './classroom.scss'
+import { secondsToHoursAndMinutes } from '../utilities/helpers'
 
 const ClassroomTemplate = ({ cohort, students }) => {
   const headItems = [
@@ -29,29 +30,30 @@ const ClassroomTemplate = ({ cohort, students }) => {
     }
   ]
 
-  const bodyItems = students.map(student => ({
-    data: [
-      {
-        sortingValue: student.name,
-        sortingType: 'string',
-        content: <p>{student.name}</p>
-      },
-      {
-        sortingValue: student.total_time,
-        sortingType: 'number',
-        content: (
-          <p>
-            {Math.floor(student.total_time / 3600)}h{' '}
-            {Math.ceil((student.total_time / 60) % 60)}m
-          </p>
-        )
-      },
-      {
-        content: <p>{student.learning_proportion}</p>
-      }
-    ],
-    renderComponent: props => <Link to={'/student/' + student.id} {...props} />
-  }))
+  const bodyItems = students.map(student => {
+    console.log('student.total_time')
+    console.log(student.total_time)
+    return {
+      data: [
+        {
+          sortingValue: student.name,
+          sortingType: 'string',
+          content: <p>{student.name}</p>
+        },
+        {
+          sortingValue: student.total_time,
+          sortingType: 'number',
+          content: <p>{secondsToHoursAndMinutes(student.total_time)}</p>
+        },
+        {
+          content: <p>{student.learning_proportion}</p>
+        }
+      ],
+      renderComponent: props => (
+        <Link to={'/student/' + student.id} {...props} />
+      )
+    }
+  })
   return (
     <div className="page-classroom">
       Class Name: {cohort.name} Class code: {cohort.code}

@@ -3,56 +3,59 @@ import {
   ExpansionPanelDetails,
   ExpansionPanelSummary
 } from '@material-ui/core'
-import React, { useEffect, useState } from 'react'
 import { MdExpandMore, MdKeyboardArrowRight } from 'react-icons/md/'
-import {
-  loadUserData,
-  loadUserInfo,
-  loadUserReadingSessions
-} from '../api/apiUser'
+import React, { useEffect, useState } from 'react'
+import { loadUserSessions, loadUserInfo } from '../api/apiUser'
 import './studentPage.scss'
+import { secondsToHoursAndMinutes } from '../utilities/helpers'
 
 const StudentActivity = ({ classId, studentId }) => {
   const [articlesByDate, setArticlesByDate] = useState([])
   const [totalArticlesCount, setTotalArticlesCount] = useState(0)
   const [userInfo, setUserInfo] = useState({})
   useEffect(() => {
-    loadUserData(studentId, 10).then(result => {
+    loadUserSessions(studentId, 19).then(result => {
       let totalArticlesCount = 0
+      console.log(result)
       result.forEach(day => {
-        totalArticlesCount += day.article_list.length
+        totalArticlesCount += day.reading_sessions.length
       })
       setArticlesByDate(result)
+      console.log(result)
       setTotalArticlesCount(totalArticlesCount)
     })
     loadUserInfo(studentId, 10).then(({ data }) => {
       setUserInfo(data)
     })
-    loadUserReadingSessions(studentId, 10)
   }, [])
   return (
     <div className="student-page">
-      {articlesByDate.map(article => {
-        console.log(article)
-        return (
-          <div>
-            <p>{article.date}</p>
-            {article.article_list.map(article => (
-              <ExpansionPanel>
-                <ExpansionPanelSummary expandIcon={<MdExpandMore />}>
-                  <h2 className="student-activity-item-heading">
-                    {article.title}
-                  </h2>
-
-                  {/* <p>another friend</p> */}
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails>
-                  {article.sentence_list.map(sentence => (
-                    <div>
+      {articlesByDate.map((day, index) => (
+        <div key={index}>
+          <p>{day.date}</p>
+          {day.reading_sessions.map((readingSession, index) => (
+            <ExpansionPanel key={index}>
+              <ExpansionPanelSummary expandIcon={<MdExpandMore />}>
+                <h2 className="student-activity-item-heading">
+                  {readingSession.article_title}
+                </h2>
+                <p className="student-activity-item-duration">
+                  {secondsToHoursAndMinutes(readingSession.duration / 1000)}
+                </p>
+              </ExpansionPanelSummary>
+              <ExpansionPanelDetails
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column'
+                }}
+              >
+                {readingSession.bookmarks.sentence_list.map(
+                  (sentence, index) => (
+                    <div className="student-page-bookmark-compound" key={index}>
                       {sentence.context}
                       <div className="student-page-bookmarks">
                         {sentence.bookmarks.map(bookmark => (
-                          <p>
+                          <p key={bookmark.id}>
                             <span className="student-page-bookmark-from">
                               {bookmark.from}
                             </span>{' '}
@@ -65,49 +68,13 @@ const StudentActivity = ({ classId, studentId }) => {
                         ))}
                       </div>
                     </div>
-                  ))}
-                </ExpansionPanelDetails>
-              </ExpansionPanel>
-            ))}
-          </div>
-        )
-      })}
-
-      {/* 0:
-article_id: 5
-context: "« Leaving Neverland », dont la première des deux parties a été diffusée dimanche soir aux Etats-Unis, relate deux nouveaux témoignages de viols répétés par l’ancien chanteur star, décédé en 2009."
-created_day: ""
-from: "dont"
-from_lang: "fr"
-id: 11
-learned_datetime: ""
-origin_importance: 11.16
-origin_rank: 348
-starred: false
-time: "2019-03-06T19:21:48.000000Z"
-title: "Un documentaire inédit sur Michael Jackson relance les accusations de pédophilie"
-to: "first"
-to_lang: "en"
-url: "https://www.lemonde.fr/cultur */}
-
-      {/* <ExpansionPanel>
-        <ExpansionPanelSummary expandIcon={<MdExpandMore />}>
-          This is my lucky friend
-        </ExpansionPanelSummary>
-        <ExpansionPanelDetails>yoyoyo</ExpansionPanelDetails>
-      </ExpansionPanel>
-      <ExpansionPanel>
-        <ExpansionPanelSummary expandIcon={<MdExpandMore />}>
-          This is my lucky friend
-        </ExpansionPanelSummary>
-        <ExpansionPanelDetails>yoyoyo</ExpansionPanelDetails>
-      </ExpansionPanel>
-      <ExpansionPanel>
-        <ExpansionPanelSummary expandIcon={<MdExpandMore />}>
-          This is my lucky friend
-        </ExpansionPanelSummary>
-        <ExpansionPanelDetails>yoyoyo</ExpansionPanelDetails>
-      </ExpansionPanel> */}
+                  )
+                )}
+              </ExpansionPanelDetails>
+            </ExpansionPanel>
+          ))}
+        </div>
+      ))}
     </div>
   )
 }
