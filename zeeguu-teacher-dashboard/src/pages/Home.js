@@ -1,11 +1,13 @@
 import Tab from '@material-ui/core/Tab'
 import Tabs from '@material-ui/core/Tabs'
 import { Link } from '@reach/router'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
+import TimePeriodContext from '../context/TimePeriodContext'
 import { getCohortsInfo, getUsersByTeacher } from '../api/apiCohort'
 import CohortsList from '../components/CohortsList'
 import ListTable from '../components/ui/ListTable'
 import './Home.scss'
+import Teacher from '../assets/images/teacher.svg'
 
 const headItems = [
   {
@@ -55,12 +57,14 @@ const Home = () => {
   const [cohorts, setCohortsInfo] = useState([])
   const [activeTab, setActiveTag] = useState(0)
   const [allStudents, setAllStudents] = useState([])
+  const { timePeriod } = useContext(TimePeriodContext)
 
   useEffect(() => {
-    getUsersByTeacher(199).then(students => {
+    console.log('CURRENT TIME PERIOD IN HOME', timePeriod)
+    getUsersByTeacher(timePeriod).then(students => {
       setAllStudents(students)
     })
-  }, [])
+  }, [timePeriod])
 
   useEffect(() => {
     getCohortsInfo().then(({ data }) => {
@@ -91,16 +95,32 @@ const Home = () => {
           <Tab label="STUDENTS" />
         </Tabs>
         {activeTab === 0 && <CohortsList cohorts={cohorts} />}
-        {activeTab === 1 && (
-          <ListTable
-            headItems={headItems}
-            bodyItems={getStudentBodyItems(allStudents)}
-          />
-        )}
+        {activeTab === 1 &&
+          (allStudents.length ? (
+            <ListTable
+              headItems={headItems}
+              bodyItems={getStudentBodyItems(allStudents)}
+            />
+          ) : (
+            <NoStudents />
+          ))}
         {/* {cohorts.length ? <HomeTemplate cohorts={cohorts} /> : <p>Loading</p>} */}
       </div>
     </div>
   )
 }
+
+const NoStudents = () => (
+  <div>
+    <h4>You currently have no active students</h4>
+    <img
+      style={{
+        maxWidth: 500
+      }}
+      src={Teacher}
+      alt=""
+    />
+  </div>
+)
 
 export default Home
