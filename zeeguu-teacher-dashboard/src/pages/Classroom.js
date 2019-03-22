@@ -1,4 +1,4 @@
-import { Button as Buttoooon, Dialog, DialogContent } from '@material-ui/core'
+import { Button, Dialog, DialogContent } from '@material-ui/core'
 import { Link } from '@reach/router'
 import React, { useEffect, useState } from 'react'
 import {
@@ -7,9 +7,12 @@ import {
   updateCohort
 } from '../api/apiCohort'
 import ClassForm from '../components/ClassForm'
+import ClassFiles from '../components/ClassFiles'
 import ListTable from '../components/ui/ListTable'
 import './classroom.scss'
 import { secondsToHoursAndMinutes } from '../utilities/helpers'
+
+import ClassRoomContext from '../context/ClassRoomContext'
 
 const ClassroomTemplate = ({ cohort, students }) => {
   const headItems = [
@@ -55,8 +58,7 @@ const ClassroomTemplate = ({ cohort, students }) => {
     }
   })
   return (
-    <div className="page-classroom">
-      Class Name: {cohort.name} Class code: {cohort.code}
+    <div className="">
       <ListTable headItems={headItems} bodyItems={bodyItems} />
     </div>
   )
@@ -93,45 +95,53 @@ const Classroom = ({ classId }) => {
   }
 
   return (
-    <div>
-      <h3>{cohortInfo.name}</h3>
-      <div>
-        <Buttoooon
-          color="primary"
-          variant="contained"
-          onClick={() => setIsOpen(true)}
-        >
-          Edit class
-        </Buttoooon>
-        <Dialog open={isOpen} onClose={() => setIsOpen(false)}>
-          <DialogContent>
-            {/* <EditClassFrom
-              cohort={cohortInfo}
-              closemodal={() => setIsOpen(false)}
-						/> */}
-            <ClassForm
-              primaryButtonText="Update Class"
-              cohort={cohortInfo}
-              onSubmit={updateClass}
-              isError={isError}
-              // closemodal={() => setIsOpen(false)}
-            />
-          </DialogContent>
-        </Dialog>
+    <ClassRoomContext.Provider value={cohortInfo}>
+      <div className="page-classroom">
+        <div className="page-classroom__header">
+          <div className="page-classroom__title">
+            <h2 className="page-classroom__title--name">
+              {cohortInfo.name}{' '}
+              <span className="page-classroom__title--language">
+                {cohortInfo.language_name}
+              </span>
+            </h2>
+            <p>Invite code: {cohortInfo.inv_code}</p>
+          </div>
+          <div>
+            <ClassFiles />
+            <Button
+              color="primary"
+              variant="contained"
+              onClick={() => setIsOpen(true)}
+            >
+              Edit class
+            </Button>
+            <Dialog open={isOpen} onClose={() => setIsOpen(false)}>
+              <DialogContent>
+                <ClassForm
+                  primaryButtonText="Update Class"
+                  cohort={cohortInfo}
+                  onSubmit={updateClass}
+                  isError={isError}
+                  // closemodal={() => setIsOpen(false)}
+                />
+              </DialogContent>
+            </Dialog>
+          </div>
+        </div>
+        {students.length === 0 ? (
+          <>
+            <p> This class has no students</p>
+            <p>
+              Students can join this class by using the invite code:{' '}
+              {cohortInfo.inv_code}
+            </p>
+          </>
+        ) : (
+          <ClassroomTemplate students={students} cohort={cohortInfo} />
+        )}
       </div>
-      I am the classroom with id {classId}
-      {students.length === 0 ? (
-        <>
-          <p> This class has no students</p>
-          <p>
-            Students can join this class by using the invite code:{' '}
-            {cohortInfo.inv_code}
-          </p>
-        </>
-      ) : (
-        <ClassroomTemplate students={students} cohort={cohortInfo} />
-      )}
-    </div>
+    </ClassRoomContext.Provider>
   )
 }
 
