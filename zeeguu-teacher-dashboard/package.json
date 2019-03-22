@@ -12,6 +12,7 @@
     "react": "^16.8.3",
     "react-cookie": "^3.0.8",
     "react-dom": "^16.8.3",
+    "react-dropzone": "^10.0.5",
     "react-epic-spinners": "^0.3.0",
     "react-icons": "^3.4.0",
     "react-scripts": "2.1.5",
