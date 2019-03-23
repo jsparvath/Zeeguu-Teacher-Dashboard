@@ -5,6 +5,10 @@ export function getFiles(classId) {
   return result
 }
 
-export function uploadFiles(data) {
-  return apiPost('UPLOAD FILES ENDPOINT', data)
+export function uploadFiles(classId, data) {
+  console.log('uploading classid', classId)
+  console.log('uploading data', data)
+  const result = apiPost(`/upload_files/${classId}`, data, false)
+  console.log('res', result)
+  return result
 }

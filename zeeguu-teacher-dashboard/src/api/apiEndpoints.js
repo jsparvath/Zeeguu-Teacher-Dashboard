@@ -1,7 +1,6 @@
 import axios from 'axios'
 import universalCookies from 'universal-cookie'
 
-
 const BASE_URL =
   process.env.NODE_ENV === 'production'
     ? process.env.REACT_APP_ZEEGUU_API_ENDPOINT_PROD
@@ -20,11 +19,12 @@ export async function apiGet(endpoint) {
   return res
 }
 
-export async function apiPost(endpoint, data) {
+export async function apiPost(endpoint, data, isForm) {
   const params = setParams()
-  const headers = {
-    'Content-Type': 'multipart/form-data'
-  }
+
+  const headers = isForm
+    ? { 'Content-Type': 'multipart/form-data' }
+    : { 'Content-Type': 'appliation/json' }
 
   const res = await axios({
     method: 'post',

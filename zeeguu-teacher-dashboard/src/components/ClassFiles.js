@@ -76,8 +76,10 @@ const FileManager = () => {
 
   const classData = useContext(ClassRoomContext)
   const languageCode = languageMap[classData.language_name]
+  console.log('hyoooooooooooooooooooooo')
+  console.log(classData.language_name)
 
-  const uploadFiles = files => {
+  const prepareFiles = files => {
     const filesData = files.map(async file => {
       const content = await readFileContent(file)
       const object = createArticleObject(content, file.name, languageCode)
@@ -86,6 +88,7 @@ const FileManager = () => {
     Promise.all(filesData).then(data => {
       console.log('data', data)
       //todo send data to api
+      uploadFiles(classData.id, data)
     })
   }
 
@@ -101,7 +104,7 @@ const FileManager = () => {
 
       <Dropzone
         accept={['.txt']} //maybe add .doc and .docx ?
-        onDrop={acceptedFiles => uploadFiles(acceptedFiles)}
+        onDrop={acceptedFiles => prepareFiles(acceptedFiles)}
       >
         {({ getRootProps, getInputProps }) => (
           <section>
