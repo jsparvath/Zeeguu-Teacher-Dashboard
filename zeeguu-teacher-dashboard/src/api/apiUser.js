@@ -1,4 +1,6 @@
 import { apiGet } from './apiEndpoints'
+
+
 /**
  * Loads an invidiual user's data.
  * Requires permission (the logged in teacher must be a teacher of the class containing user with user_id ).

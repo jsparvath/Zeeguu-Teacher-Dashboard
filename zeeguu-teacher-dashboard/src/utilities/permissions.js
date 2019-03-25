@@ -1,40 +1,41 @@
 import universalCookies from 'universal-cookie'
+import { apiGet } from '../api/apiEndpoints'
+import { useState, useEffect } from 'react'
+
 const getSession = () => {
   const cookies = new universalCookies()
   return cookies.get('sessionID')
 }
 
-const checkSession = () => {}
+/**
+ * Validates if the user is logged in.
+ * @returns {boolean} true if the user is logged in.
+ */
+const _checkSession = async () => {
+  try {
+    let result = await apiGet('/validate')
+    if (result.data === 'OK') {
+      return true
+    }
+    return false
+  } catch {
+    return false
+  }
+}
 
-export { getSession }
-// :
-// """
-// Main function to validate the user.
-// :return: Returns a boolean on whether the session is ok.
-// """
-// if not 'sessionID' in session.keys():
-//     session['sessionID'] = '0'
+const useAuthentication = () => {
+  const [isAuthenticated, setAuthenticated] = useState(false)
+  const [loadingAuth, setLoading] = useState(true)
 
-// permission_check = api_get('validate', raise_for_status=False).text
+  useEffect(() => {
+    _checkSession().then(result => {
+      console.log('leading auth')
+      setLoading(false)
+      setAuthenticated(result)
+    })
+  }, [])
 
-// if permission_check == "OK":
-//     return True
-// return False
+  return { loadingAuth, isAuthenticated }
+}
 
-// def has_session(func):
-// """
-// General decorator to check if the teacher is logged in.
-// :param func: The function this decorator wraps.
-// :return: Returns either a redirect to login, if the user is not logged in,
-// or the passed function.
-// """
-
-// @wraps(func)
-// def session_wrapper(*args, **kwargs):
-
-//     if check_session():
-//         return func(*args, **kwargs)
-//     else:
-//         return redirect("login")
-
-// return session_wrapper
+export { getSession, useAuthentication }
